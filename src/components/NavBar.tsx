@@ -57,6 +57,7 @@ export default function NavBar() {
                 src="/logo.png"
                 alt="Maroon Investment Club"
                 fill
+                sizes="40px"
                 className="object-contain"
                 priority
               />
