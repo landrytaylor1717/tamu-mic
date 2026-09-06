@@ -228,23 +228,6 @@ export default function HeroScene() {
       return model;
     }
 
-    // A couple of these ChatGPT-generated assets (Chrysler, Woolworth)
-    // export their window/glass material with no base color set at all —
-    // toonifyModel's fallback then colors it pure white, and since that
-    // one material covers every window on every floor, the result is a
-    // building-sized grid of stark white squares instead of tinted glass.
-    // Retints any mesh still sitting at that untouched white fallback.
-    function tintUntexturedWhite(model, color) {
-      model.traverse((o) => {
-        if (!o.isMesh || !o.material || o.material.map) return;
-        const c = o.material.color;
-        if (c && c.r > 0.97 && c.g > 0.97 && c.b > 0.97) {
-          o.material.color.set(color);
-        }
-      });
-      return model;
-    }
-
     // Collapses a model with many separate mesh nodes sharing a handful
     // of materials down to one mesh per material. Some exported assets
     // arrive as hundreds of individual meshes (e.g. one per seat row)
@@ -505,13 +488,18 @@ export default function HeroScene() {
       // background, hazier with distance/fog, verified on-screen (camera
       // frustum widens with depth, same reason OWTC's own wide footprint
       // stays in frame this far off-center).
+      // Same vertex-color technique as the new Chrysler render (no
+      // materials at all) — the earlier mergeModelByMaterial +
+      // flat-tint fix collapsed its real per-part coloring into one
+      // undifferentiated tan block, which is what read as a flat,
+      // ungrounded cutout rather than a shaded building. This preserves
+      // the baked coloring the same way Chrysler's does.
       try {
-        const woolworthMerged = mergeModelByMaterial(woolworthModel.clone(true), [
+        const woolworthMerged = mergeModelPreservingVertexColors(woolworthModel.clone(true), [
           "maroon_axis",
           "maroon_presentation_plinth",
         ]);
-        const woolworth = toonifyModel(woolworthMerged);
-        tintUntexturedWhite(woolworth, 0x9a8a72); // this file's window material has no base color
+        const woolworth = woolworthMerged;
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
         woolworth.position.x = -68;
