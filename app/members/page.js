@@ -49,25 +49,25 @@ export default async function MembersDashboard() {
             <div className="lede-kicker">In the pipeline</div>
             <div className="lede-body">
               <h2>Open ideas</h2>
-              <p className="note">
-                Placeholder pitches — replace with the fund&apos;s real
-                ones in lib/portfolioData.js.
-              </p>
             </div>
           </div>
-          <div className="index-list">
-            {ideas.map((idea, i) => (
-              <div className="index-row" key={i}>
-                <div className="index-title">
-                  {idea.title}
-                  <div className="note" style={{ marginTop: 4 }}>
-                    {idea.author} — {idea.status}
+          {ideas.length === 0 ? (
+            <p className="note">Nothing in the pipeline right now — check back soon.</p>
+          ) : (
+            <div className="index-list">
+              {ideas.map((idea, i) => (
+                <div className="index-row" key={i}>
+                  <div className="index-title">
+                    {idea.title}
+                    <div className="note" style={{ marginTop: 4 }}>
+                      {idea.author} — {idea.status}
+                    </div>
                   </div>
+                  <div className="index-desc">{idea.summary}</div>
                 </div>
-                <div className="index-desc">{idea.summary}</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
 

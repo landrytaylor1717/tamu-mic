@@ -35,8 +35,7 @@ export default function About() {
               <h3>Our history</h3>
               <p className="dropcap">
                 Founded by students who wanted hands-on experience the
-                classroom couldn&apos;t offer
-                <span className="note"> [add founding year]</span>, the
+                classroom couldn&apos;t offer, the
                 Maroon Investment Club has grown into one of the more
                 selective finance organizations on campus, with an alumni
                 network across banking, asset management, and technology.

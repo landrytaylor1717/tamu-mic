@@ -42,10 +42,7 @@ export default function Calendar() {
             <div className="lede-kicker">Every week</div>
             <div className="lede-body">
               <h2>Standing meetings</h2>
-              <p>
-                Exact rooms get finalized each semester — swap the
-                placeholders below once you have them.
-              </p>
+              <p>Room assignments are finalized at the start of each semester.</p>
             </div>
           </div>
           <div className="index-list">
@@ -63,10 +60,7 @@ export default function Calendar() {
             <div className="lede-kicker">This semester</div>
             <div className="lede-body">
               <h2>Key dates</h2>
-              <p className="note">
-                Placeholder dates — replace with the real schedule each
-                semester, or eventually pull this from a shared calendar.
-              </p>
+              <p className="note">Dates are added as they&apos;re confirmed each semester.</p>
             </div>
           </div>
           <div className="index-list">
