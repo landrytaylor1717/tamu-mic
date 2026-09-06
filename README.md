@@ -1,118 +1,63 @@
-# Maroon Investment Club — Web Platform
+# Maroon Investment Club — Next.js site
 
-The official web platform for the **Maroon Investment Club (MIC)** at Texas A&M University. A production-ready Next.js application showcasing the club's dual-division investment fund, leadership, and application portal.
-
-![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38B2AC?logo=tailwind-css)
-![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)
-
-## Features
-
-- **Home** — Hero section with animated gradient, club statistics with count-up animations, division previews, and sponsor ticker
-- **About** — Interactive timeline, leadership team grid, and tiered corporate sponsors
-- **Maroon Fund** — Fund overview with recharts performance chart, sector allocation bars, and investment philosophy
-- **Equities Division** — Sector coverage (TMT, Healthcare, Energy), 5-step investment pipeline, and sample stock pitch
-- **Quant Division** — Terminal-inspired UI, Python code blocks, strategy performance metrics, and backtesting results table
-- **Apply** — Application form with client-side validation, division radio selection, and animated success state
-
-## Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| [Next.js](https://nextjs.org) (App Router) | Framework & routing |
-| [TypeScript](https://www.typescriptlang.org) | Type safety |
-| [Tailwind CSS v4](https://tailwindcss.com) | Styling & design system |
-| [Framer Motion](https://www.framer.com/motion/) | Animations & page transitions |
-| [Recharts](https://recharts.org) | Fund performance charts |
-| [Lucide React](https://lucide.dev) | Icon system |
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18.17+
-- npm 9+
-
-### Local Development
+## Running it
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd tamu-mic
-
-# Install dependencies
 npm install
-
-# Start the development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Then open http://localhost:3000. Requires Node 18+ (built and tested on Node 22).
 
-### Production Build
+To build for production:
 
 ```bash
-# Build for production
 npm run build
-
-# Start production server
 npm start
 ```
 
-## Deployment (Vercel)
+## Structure
 
-This project is optimized for deployment on [Vercel](https://vercel.com).
+- `app/` — one folder per route (App Router). `app/page.js` is the homepage.
+- `components/` — shared `Nav`, `Footer`, and `Ticker`, used across every page.
+- `app/globals.css` — the whole design system: colors, type, and every
+  reusable class (`.division`, `.program`, `.photo-index`, etc.) live here,
+  not scattered per-page.
+- `public/logo-icon.png` / `public/logo-full.png` — the real club logo,
+  background removed.
 
-### Option 1: Vercel CLI
+## Pages included
 
-```bash
-# Install Vercel CLI globally
-npm i -g vercel
+- `/` — Home
+- `/about` — History, mission, leadership (placeholder names)
+- `/maroon-fund/equities`
+- `/maroon-fund/quant`
+- `/travel-series`
 
-# Login to your Vercel account
-vercel login
+## What's still a placeholder — swap these out before this goes live
 
-# Deploy to production
-vercel --prod
-```
+1. **Hero photo** — currently hotlinked from `tamumic.com`'s live site
+   (see the note in `next.config.mjs`). Drop the real file into `/public`
+   and point `app/page.js` at it, then delete the `remotePatterns` entry.
+2. **All `.swatch` gray blocks** — Programs, Socials, and Travel Series
+   photos. Replace the `<div className="swatch">` elements with real
+   `<img>` or `next/image` tags once you have photos. The grayscale +
+   hairline-border treatment (see `.program-figure img` in globals.css)
+   will make real photos look consistent with the rest of the site.
+3. **Sponsor names** — currently `[Sponsor One]` etc. in `app/page.js`.
+4. **Founding year** — flagged inline in the History copy on `/` and `/about`.
+5. **Leadership names** — placeholder in `app/about/page.js`.
+6. **Ticker figures** (fund performance, Sharpe ratio) — in
+   `components/Ticker.jsx`. Either hand-edit these periodically or wire
+   the component up to a real data source later.
+7. **Apply button** — currently links to `#`. Point it at the real
+   Google Form / application link.
 
-### Option 2: Git Integration
+## Notes on the build
 
-1. Push this repository to GitHub
-2. Go to [vercel.com/new](https://vercel.com/new)
-3. Import the repository
-4. Vercel auto-detects Next.js — click **Deploy**
-
-## Project Structure
-
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx          # Root layout (NavBar, Footer, fonts)
-│   ├── page.tsx            # Home (/)
-│   ├── about/              # About (/about)
-│   ├── maroon-fund/        # Fund Overview (/maroon-fund)
-│   │   ├── equities/       # Equities Division (/maroon-fund/equities)
-│   │   └── quant/          # Quant Division (/maroon-fund/quant)
-│   └── apply/              # Apply (/apply)
-├── components/             # Shared UI components
-│   ├── NavBar.tsx           # Sticky nav with dropdown & mobile menu
-│   ├── Footer.tsx           # Multi-column footer
-│   ├── StatCard.tsx         # Animated statistics card
-│   ├── MemberProfile.tsx    # Leadership profile card
-│   ├── PerformanceChart.tsx # Recharts fund performance chart
-│   ├── DivisionHero.tsx     # Division hero (equities/quant variants)
-│   ├── SectionHeading.tsx   # Consistent section title
-│   └── PageTransition.tsx   # Framer Motion page wrapper
-└── data/                   # Dummy data layer
-    ├── leadership.ts
-    ├── fund-metrics.ts
-    ├── sponsors.ts
-    ├── sectors.ts
-    └── quant-strategies.ts
-```
-
-## License
-
-© 2025 Maroon Investment Club. All rights reserved.
+- Fonts (Fraunces, Inter, IBM Plex Mono) load via `next/font/google` in
+  `app/layout.js` — this needs normal internet access at build time to
+  fetch them (works out of the box on Vercel or any machine with regular
+  internet; it won't work behind a fully offline/sandboxed network).
+- Deploys cleanly to Vercel with zero config (`vercel deploy`), since
+  that's the default target for Next.js. Any other Node host works too.
