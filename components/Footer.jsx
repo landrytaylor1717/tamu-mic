@@ -17,7 +17,7 @@ export default function Footer() {
           >
             <Image
               className="mark"
-              style={{ height: 26 }}
+              style={{ height: 26, width: "auto" }}
               src={logoIcon}
               alt="Maroon Investment Club — bull and bear mark"
               height={26}

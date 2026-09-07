@@ -30,7 +30,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${mono.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${inter.variable} ${mono.variable}`}
+    >
       <body>
         <Ticker />
         {children}

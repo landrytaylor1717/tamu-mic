@@ -64,7 +64,6 @@ export default function TravelSeries() {
                   src={trip.photos[0]?.src}
                   alt={trip.photos[0]?.alt ?? `${trip.city}, TX`}
                   height={220}
-                  className="program-photo"
                 />
                 <figcaption>{trip.city}, TX</figcaption>
               </figure>

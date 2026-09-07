@@ -26,6 +26,7 @@ export default function Nav({ active }) {
             src={logoIcon}
             alt="Maroon Investment Club — bull and bear mark"
             height={30}
+            style={{ width: "auto" }}
           />
           <span className="brand-text">
             <span className="brand-name">

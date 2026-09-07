@@ -1024,9 +1024,11 @@ export default function HeroScene() {
     // ---------- camera drift + resize ----------
     let t = 0;
     let raf = 0;
-    const clock = new THREE.Clock();
+    let lastTime = performance.now();
     function tick() {
-      const delta = Math.min(clock.getDelta(), 0.1); // cap so a stalled/backgrounded tab doesn't teleport the critters on resume
+      const now = performance.now();
+      const delta = Math.min((now - lastTime) / 1000, 0.1); // cap so a stalled/backgrounded tab doesn't teleport the critters on resume
+      lastTime = now;
       if (!prefersReduced) {
         t += 0.0009;
         // Diagonal-gait leg swing (front-left+back-right vs. front-right+

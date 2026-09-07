@@ -267,7 +267,7 @@ export default function Home() {
         </a>
       </section>
 
-    </div>
+      </div>
 
       <div className="cta-band">
         <div className="wrap cta-inner">
