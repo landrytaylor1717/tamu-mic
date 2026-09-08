@@ -522,29 +522,23 @@ export default function HeroScene() {
         gapFiller.castShadow = true;
         gapFiller.receiveShadow = true;
         woolworthMerged.add(gapFiller);
-        // A second gap, same cause: the four corner turrets (the
+        // A second gap, same cause: the four corner turret columns (the
         // "columns on each corner" above the main tower) sit at
-        // z=65.6-70.2, but the shaft below them stops at z=62.6 — a
-        // second ~3-unit hole at each of the four corners specifically
-        // (the crown pieces fill the center of that band but don't reach
-        // the corners). One small filler per corner, sized to the
-        // turrets' own footprint and colored to match.
-        const turretCorners = [
-          [-3.65, -4.35],
-          [3.65, -4.35],
-          [-3.65, 4.35],
-          [3.65, 4.35],
-        ];
-        turretCorners.forEach(([cx, cy]) => {
-          const turretFiller = new THREE.Mesh(
-            new THREE.BoxGeometry(1.8, 1.9, 3.0),
-            new THREE.MeshToonMaterial({ color: 0xc1b9a7, gradientMap })
-          );
-          turretFiller.position.set(cx, cy, 64.1);
-          turretFiller.castShadow = true;
-          turretFiller.receiveShadow = true;
-          woolworthMerged.add(turretFiller);
-        });
+        // z=65.6-70.2, but the shaft below them stops at z=62.6.
+        // crown_lower/crown_cornice sit in this band too, but visibly
+        // read as thin decorative moldings rather than a solid disc —
+        // confirmed by pulling the model up close: four small corner-only
+        // fillers left an open gap spanning most of the width, not just
+        // the corners. Replaced with one full-width filler across the
+        // whole band, same approach as the base/shaft gap below it.
+        const crownGapFiller = new THREE.Mesh(
+          new THREE.BoxGeometry(8.8, 11.2, 4.5),
+          new THREE.MeshToonMaterial({ color: 0xc1b9a7, gradientMap })
+        );
+        crownGapFiller.position.set(0, 0, 63.85);
+        crownGapFiller.castShadow = true;
+        crownGapFiller.receiveShadow = true;
+        woolworthMerged.add(crownGapFiller);
         const woolworth = woolworthMerged;
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
