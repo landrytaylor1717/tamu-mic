@@ -7,10 +7,9 @@ export const metadata = {
 };
 
 const weekly = [
-  { name: "General Meetings", when: "Tuesdays, 7:00 PM — Wehner [Room TBD]" },
-  { name: "Foundations Bootcamp", when: "Mondays, 7:00 PM — Wehner [Room TBD]" },
-  { name: "Equities Division", when: "Thursdays, 6:00 PM — Wehner [Room TBD]" },
-  { name: "Quant Division", when: "Wednesdays, 6:00 PM — Wehner [Room TBD]" },
+  { name: "General Meetings", when: "Mondays, 8:00 PM — Wehner [Room TBD]" },
+  { name: "Equities Division", when: "Wednesdays, 7:00 PM — Wehner [Room TBD]" },
+  { name: "Quant Division", when: "Tuesdays 7:00 - 8:00 PM, Fridays 6:00 - 8:00 PM — Wehner [Room TBD]" },
 ];
 
 const milestones = [
