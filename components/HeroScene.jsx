@@ -522,6 +522,29 @@ export default function HeroScene() {
         gapFiller.castShadow = true;
         gapFiller.receiveShadow = true;
         woolworthMerged.add(gapFiller);
+        // A second gap, same cause: the four corner turrets (the
+        // "columns on each corner" above the main tower) sit at
+        // z=65.6-70.2, but the shaft below them stops at z=62.6 — a
+        // second ~3-unit hole at each of the four corners specifically
+        // (the crown pieces fill the center of that band but don't reach
+        // the corners). One small filler per corner, sized to the
+        // turrets' own footprint and colored to match.
+        const turretCorners = [
+          [-3.65, -4.35],
+          [3.65, -4.35],
+          [-3.65, 4.35],
+          [3.65, 4.35],
+        ];
+        turretCorners.forEach(([cx, cy]) => {
+          const turretFiller = new THREE.Mesh(
+            new THREE.BoxGeometry(1.8, 1.9, 3.0),
+            new THREE.MeshToonMaterial({ color: 0xc1b9a7, gradientMap })
+          );
+          turretFiller.position.set(cx, cy, 64.1);
+          turretFiller.castShadow = true;
+          turretFiller.receiveShadow = true;
+          woolworthMerged.add(turretFiller);
+        });
         const woolworth = woolworthMerged;
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
