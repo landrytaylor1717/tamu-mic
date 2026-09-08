@@ -34,7 +34,6 @@ export default function HeroScene() {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const scene = new THREE.Scene();
-    if (process.env.NODE_ENV !== "production") window.__debugScene = scene;
 
     function skyTexture() {
       const c = document.createElement("canvas");
@@ -272,21 +271,6 @@ export default function HeroScene() {
       return result;
     }
 
-    // A couple of these ChatGPT-generated assets export their window/
-    // glass material with no base color set at all — toonifyModel's
-    // fallback then colors it pure white. Retints any mesh still sitting
-    // at that untouched white fallback.
-    function tintUntexturedWhite(model, color) {
-      model.traverse((o) => {
-        if (!o.isMesh || !o.material || o.material.map) return;
-        const c = o.material.color;
-        if (c && c.r > 0.97 && c.g > 0.97 && c.b > 0.97) {
-          o.material.color.set(color);
-        }
-      });
-      return model;
-    }
-
     // A different export technique than every other asset here: no
     // materials at all — each mesh instead bakes its color per-vertex
     // (a glTF COLOR_0 attribute). mergeModelByMaterial keys groups by
@@ -503,6 +487,10 @@ export default function HeroScene() {
       // background, hazier with distance/fog, verified on-screen (camera
       // frustum widens with depth, same reason OWTC's own wide footprint
       // stays in frame this far off-center).
+      // Same vertex-color technique as the new Chrysler render (no
+      // materials at all — color is baked per-vertex) — this is the
+      // model's actual authored coloring (stone, windows, crown, copper
+      // roof each their real tone), not a substitute tint.
       // The 15 "front_pier"/"side_pier" facade columns are excluded below —
       // in this source file they each run the full z=40-to-76.5 span,
       // well past where the shaft actually narrows into the crown
@@ -512,14 +500,13 @@ export default function HeroScene() {
       // other" look. Not a position/merge bug; the piers are just
       // authored taller than the shaft they're meant to sit on.
       try {
-        const woolworthMerged = mergeModelByMaterial(woolworthModel.clone(true), [
+        const woolworthMerged = mergeModelPreservingVertexColors(woolworthModel.clone(true), [
           "maroon_axis",
           "maroon_presentation_plinth",
           "front_pier",
           "side_pier",
         ]);
-        const woolworth = toonifyModel(woolworthMerged);
-        tintUntexturedWhite(woolworth, 0x9a8a72); // this file's window material has no base color
+        const woolworth = woolworthMerged;
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
         woolworth.position.x = -68;
