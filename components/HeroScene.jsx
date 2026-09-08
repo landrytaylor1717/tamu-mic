@@ -506,6 +506,22 @@ export default function HeroScene() {
           "front_pier",
           "side_pier",
         ]);
+        // The source file itself has a real gap between the wide
+        // "shoulder" tier (tops out at local z≈19.65) and the tapering
+        // shaft above it (solid wall doesn't resume until z≈26.6) — that
+        // band has only sparse windows/a thin trim band, no backing
+        // wall, so the sky shows straight through. Plugs it with a
+        // plain box sized to the narrower (shaft-side) footprint so it
+        // stays hidden behind the wider shoulder below, colored to match
+        // the shaft's own sampled vertex tone.
+        const gapFiller = new THREE.Mesh(
+          new THREE.BoxGeometry(9.6, 12, 6.95),
+          new THREE.MeshToonMaterial({ color: 0xb6ae97, gradientMap })
+        );
+        gapFiller.position.set(0, 0, 23.1);
+        gapFiller.castShadow = true;
+        gapFiller.receiveShadow = true;
+        woolworthMerged.add(gapFiller);
         const woolworth = woolworthMerged;
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
