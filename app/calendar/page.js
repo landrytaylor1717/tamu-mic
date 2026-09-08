@@ -37,12 +37,10 @@ export default function Calendar() {
         </div>
 
         <section>
-          <div className="lede" style={{ marginBottom: 0 }}>
+          <div className="lede-center">
             <div className="lede-kicker">Every week</div>
-            <div className="lede-body">
-              <h2>Standing meetings</h2>
-              <p>Room assignments are finalized at the start of each semester.</p>
-            </div>
+            <h2>Standing meetings</h2>
+            <p>Room assignments are finalized at the start of each semester.</p>
           </div>
           <div className="index-list">
             {weekly.map((w) => (
@@ -55,12 +53,10 @@ export default function Calendar() {
         </section>
 
         <section style={{ paddingTop: 0 }}>
-          <div className="lede" style={{ marginBottom: 0 }}>
+          <div className="lede-center">
             <div className="lede-kicker">This semester</div>
-            <div className="lede-body">
-              <h2>Key dates</h2>
-              <p className="note">Dates are added as they&apos;re confirmed each semester.</p>
-            </div>
+            <h2>Key dates</h2>
+            <p className="note">Dates are added as they&apos;re confirmed each semester.</p>
           </div>
           <div className="index-list">
             {milestones.map((m) => (
