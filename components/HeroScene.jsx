@@ -682,11 +682,15 @@ export default function HeroScene() {
       // building, its own ground/road plane, an oak tree, and two full
       // lettered "WELCOME TO AGGIELAND" sign sets around the tower
       // itself; all excluded below so only the tower (shaft, tank, skirt
-      // collar, roof, base plinth) loads.
+      // collar, roof, base plinth) loads. "building_roof" is that bundled
+      // building's roof specifically — its walls (campus_building) were
+      // already excluded, but the roof wasn't, so it rendered as a
+      // separate white shape with nothing under it.
       try {
         const towerMerged = mergeModelByMaterial(waterTowerModel.clone(true), [
           "campus_building",
           "campus_ground",
+          "building_roof",
           "maroon_road",
           "road_center",
           "oak_",
@@ -696,6 +700,20 @@ export default function HeroScene() {
           "dusk_sun",
         ]);
         const waterTower = toonifyModel(towerMerged);
+        // The tower's own main parts (shaft, tank, skirt collar, roof
+        // vent/beacon, base plinth) have no material at all in this file
+        // — toonifyModel's fallback colors them flat white, which under
+        // toon shading's hard light/dark bands reads as disconnected
+        // white patches rather than a shaded cylindrical tank. A warm
+        // cream tone (matching the tower's own "aggie_outline" lettering
+        // color) instead of stark white.
+        waterTower.traverse((o) => {
+          if (!o.isMesh || !o.material || o.material.map) return;
+          const c = o.material.color;
+          if (c && c.r > 0.97 && c.g > 0.97 && c.b > 0.97) {
+            o.material.color.set(0xede6d6);
+          }
+        });
         waterTower.rotation.x = -Math.PI / 2;
         // Sized down from 16 — its wide-legged support structure gives it
         // a footprint bigger than its slender silhouette suggests, and at
@@ -804,6 +822,16 @@ export default function HeroScene() {
 
       [treeOak, treeDetailed].forEach((source, i) => {
         const model = toonifyModel(source.clone(true));
+        // tree_detailed's root node uses an authored pure-white
+        // "_defaultMat" for a small part of the mesh — recolor to bark
+        // brown rather than leave a stray white patch on the trunk.
+        model.traverse((o) => {
+          if (!o.isMesh || !o.material || o.material.map) return;
+          const c = o.material.color;
+          if (c && c.r > 0.97 && c.g > 0.97 && c.b > 0.97) {
+            o.material.color.set(0xe28357);
+          }
+        });
         fitHeight(model, 4.4);
         // tucked beside the Academic Building, clear of the Century
         // Tree's much larger canopy and Kyle Field's background footprint
