@@ -871,29 +871,6 @@ export default function HeroScene() {
       }
     })();
 
-    const bridgeMat = toon(0x2a2620);
-    [
-      [-6, -13],
-      [-6, 13],
-    ].forEach(([x, z]) => {
-      const pylon = outline(shadowed(new THREE.Mesh(new THREE.BoxGeometry(0.8, 12, 0.8), bridgeMat)));
-      pylon.position.set(x, 6, z);
-      nyc.add(pylon);
-      const crossbeam = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.4, 0.4), bridgeMat));
-      crossbeam.position.set(x, 10.6, z);
-      nyc.add(crossbeam);
-    });
-    const deck = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.3, 28), toon(0x35302a)));
-    deck.position.set(-6, 3.4, 0);
-    nyc.add(deck);
-    const cableMat = toon(0x1c1815);
-    for (let i = -12; i <= 12; i += 2) {
-      const droop = Math.pow(i / 12, 2) * 4.4;
-      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 10.6 - droop), cableMat);
-      cable.position.set(-6, 3.4 + (10.6 - droop) / 2, i);
-      nyc.add(cable);
-    }
-
     const bronze = toon(0x2c2420);
     const bullBody = shadowed(new THREE.Mesh(new THREE.SphereGeometry(1.15, 8, 7), bronze));
     bullBody.scale.set(1.5, 1.0, 0.95);
@@ -1146,7 +1123,7 @@ export default function HeroScene() {
       ref={canvasRef}
       className="hero-canvas"
       role="img"
-      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, JPMorgan Chase's 270 Park Avenue, a suspension bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
+      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, JPMorgan Chase's 270 Park Avenue, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
     />
   );
 }
