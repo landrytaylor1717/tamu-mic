@@ -819,17 +819,24 @@ export default function HeroScene() {
       // Brooklyn Bridge — replaces the old procedural placeholder bridge
       // (boxes + cylinders) in the same spot on the NYC side. Real
       // materials with baked colors (no vertex-color trick needed here).
-      // Authored with X = span length, Y = deck width, Z = height — a
-      // single Euler rotation can't remap that to "Y = height, Z = span"
-      // (it's a 3-cycle of the axes, not a simple swap), so the same
-      // quarter-turn is applied twice as a quaternion instead.
+      // Authored with X = span length, Y = deck width, Z = height (0 at
+      // the footings, 36.7 at the tower caps) — building that mapping
+      // (span->Z, width->X, height->Y, height direction preserved) as an
+      // explicit basis-remap matrix instead of composing Euler rotations
+      // by hand, since a hand-derived pair of Euler rotations landed the
+      // bridge upside down here (footings at the top, tower caps at the
+      // ground) without changing its bounding box, which stays the same
+      // under a height-axis flip and so can't catch this by itself.
       try {
         const bridgeMerged = mergeModelByMaterial(brooklynBridgeModel.clone(true));
         const bridge = toonifyModel(bridgeMerged);
-        const quarterTurn = new THREE.Quaternion().setFromEuler(
-          new THREE.Euler(-Math.PI / 2, Math.PI / 2, 0, "XYZ")
+        const axisRemap = new THREE.Matrix4().set(
+          0, 1, 0, 0,
+          0, 0, 1, 0,
+          1, 0, 0, 0,
+          0, 0, 0, 1
         );
-        bridge.quaternion.copy(quarterTurn).multiply(quarterTurn);
+        bridge.quaternion.setFromRotationMatrix(axisRemap);
         fitHeight(bridge, 12); // towers roughly Flatiron-scale, per real relative heights
         bridge.position.x = -6;
         bridge.position.z = 0;
