@@ -99,7 +99,26 @@ export default function HeroScene() {
       }
       const geo = new THREE.BufferGeometry();
       geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      const mat = new THREE.PointsMaterial({ color: 0xfff3e0, size: 0.9, sizeAttenuation: true, transparent: true, opacity: 0.8 });
+      // WebGL point sprites are flat squares unless given a mask texture —
+      // without one, every "star" here rendered as a small white square
+      // floating in the sky instead of a soft dot.
+      const starTex = radialTexture(
+        [
+          [0, "rgba(255,255,255,1)"],
+          [0.4, "rgba(255,255,255,0.6)"],
+          [1, "rgba(255,255,255,0)"],
+        ],
+        32
+      );
+      const mat = new THREE.PointsMaterial({
+        color: 0xfff3e0,
+        size: 0.9,
+        sizeAttenuation: true,
+        map: starTex,
+        alphaTest: 0.05,
+        transparent: true,
+        opacity: 0.8,
+      });
       return new THREE.Points(geo, mat);
     }
     scene.add(starfield());
