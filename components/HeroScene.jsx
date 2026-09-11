@@ -112,8 +112,16 @@ export default function HeroScene() {
       ],
       128
     );
-    const sunSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: sunTex, transparent: true, depthWrite: false }));
-    sunSprite.scale.set(50, 50, 1);
+    // alphaTest discards the sprite's near-transparent fringe outright —
+    // without it, when a building partially occludes this glow, the
+    // fringe's faint-but-nonzero alpha (the corners of its square quad,
+    // where the radial gradient never quite reaches true zero) survives
+    // next to the occluder's hard edge and blooms into a visible bright
+    // square hovering beside the building.
+    const sunSprite = new THREE.Sprite(
+      new THREE.SpriteMaterial({ map: sunTex, transparent: true, depthWrite: false, alphaTest: 0.05 })
+    );
+    sunSprite.scale.set(36, 36, 1);
     sunSprite.position.set(0, 9, -60);
     scene.add(sunSprite);
 
