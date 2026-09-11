@@ -367,6 +367,7 @@ export default function HeroScene() {
               "/models/century-tree.glb",
               "/models/jpmorgan-270-park.glb",
               "/models/wehner-building.glb",
+              "/models/brooklyn-bridge.glb",
             ])
             // load errors are tagged with their URL before rejecting — a
             // silent Promise.all rejection here used to take down every
@@ -400,6 +401,7 @@ export default function HeroScene() {
         centuryTreeModel,
         jpmorganModel,
         wehnerModel,
+        brooklynBridgeModel,
       ] = models;
 
       // Empire State Building — modeled in Blender (bevel/array/boolean
@@ -814,6 +816,28 @@ export default function HeroScene() {
         console.error("Wehner Building failed to place — rest of the scene still loads", e);
       }
 
+      // Brooklyn Bridge — replaces the old procedural placeholder bridge
+      // (boxes + cylinders) in the same spot on the NYC side. Real
+      // materials with baked colors (no vertex-color trick needed here).
+      // Authored with X = span length, Y = deck width, Z = height — a
+      // single Euler rotation can't remap that to "Y = height, Z = span"
+      // (it's a 3-cycle of the axes, not a simple swap), so the same
+      // quarter-turn is applied twice as a quaternion instead.
+      try {
+        const bridgeMerged = mergeModelByMaterial(brooklynBridgeModel.clone(true));
+        const bridge = toonifyModel(bridgeMerged);
+        const quarterTurn = new THREE.Quaternion().setFromEuler(
+          new THREE.Euler(-Math.PI / 2, Math.PI / 2, 0, "XYZ")
+        );
+        bridge.quaternion.copy(quarterTurn).multiply(quarterTurn);
+        fitHeight(bridge, 12); // towers roughly Flatiron-scale, per real relative heights
+        bridge.position.x = -6;
+        bridge.position.z = 0;
+        nyc.add(bridge);
+      } catch (e) {
+        console.error("Brooklyn Bridge failed to place — rest of the scene still loads", e);
+      }
+
       // The Kenney filler skyscrapers that used to sit here were dropped:
       // ESB and OWTC's real (measured) footprints are wide enough that
       // every one of these six smaller buildings fell inside one or both
@@ -1123,7 +1147,7 @@ export default function HeroScene() {
       ref={canvasRef}
       className="hero-canvas"
       role="img"
-      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, JPMorgan Chase's 270 Park Avenue, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
+      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, JPMorgan Chase's 270 Park Avenue, the Brooklyn Bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
     />
   );
 }
