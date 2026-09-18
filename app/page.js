@@ -3,7 +3,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import HeroScene from "@/components/HeroScene";
 import SitePhoto from "@/components/SitePhoto";
-import { APPLY_FORM_URL } from "@/lib/links";
+import { APPLY_FORM_URL, INSTAGRAM_URL } from "@/lib/links";
 
 export default function Home() {
   return (
@@ -36,12 +36,13 @@ export default function Home() {
 
     <div className="alert-band">
       <div className="wrap alert-inner">
-        <span className="alert-label">Important</span>
+        <span className="alert-label">Applications closed</span>
         <p className="alert-text">
-          Applications for the Fall cohort close <strong>September 15</strong>.
+          Applications will open again next semester. Follow us on Instagram{" "}
+          <strong>@marooninvestmentclub</strong> to stay updated.
         </p>
-        <a className="alert-cta" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
-          Apply now →
+        <a className="alert-cta" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+          Follow us →
         </a>
       </div>
     </div>
