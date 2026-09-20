@@ -11,8 +11,8 @@ export default function SitePhoto({ src, alt, className, height }) {
     return <div className={className ? `${className} swatch` : "swatch"} style={height ? { height } : undefined} aria-hidden="true" />;
   }
 
-  // eslint-disable-next-line @next/next/no-img-element
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       className={className}
       src={src}

@@ -53,6 +53,6 @@ export const tickerItems = [
   { type: "stock", symbol: "DKNG", label: "DraftKings", fallback: 3.12 },
   { type: "stock", symbol: "SPGI", label: "S&P Global", fallback: 0.29 },
 
-  { type: "text", label: "APPLICATIONS OPEN — FALL COHORT" },
+  { type: "text", label: "APPLICATIONS OPEN NEXT SEMESTER" },
   { type: "text", label: "MAYS BUSINESS SCHOOL, COLLEGE STATION" },
 ];

@@ -148,11 +148,11 @@ export default function LearnMore() {
           <div className="page-kicker">Learn More</div>
           <h1>Find your own reading list.</h1>
           <p>
-            Rather than one long undifferentiated shelf, tell us what you're
-            curious about and where you're starting from — you'll get three
+            Rather than one long undifferentiated shelf, tell us what you&apos;re
+            curious about and where you&apos;re starting from — you&apos;ll get three
             specific books per area, picked for that level, not just a
             beginner-to-expert dump. Click any title for a real summary,
-            what it's actually organized like, and what you'll walk away
+            what it&apos;s actually organized like, and what you&apos;ll walk away
             knowing.
           </p>
         </div>

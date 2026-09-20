@@ -19,37 +19,34 @@ const links = [
 export default function Nav({ active }) {
   return (
     <nav>
-      <div className="nav-left">
+      <div className="nav-top">
         <Link className="brand" href="/">
           <Image
             className="mark"
             src={logoIcon}
             alt="Maroon Investment Club — bull and bear mark"
-            height={30}
+            height={26}
             style={{ width: "auto" }}
           />
-          <span className="brand-text">
-            <span className="brand-name">
-              Maroon<em>&nbsp;Investment&nbsp;Club</em>
-            </span>
-            <span className="brand-motto">Built by Aggies, for Aggies.</span>
+          <span className="brand-name">
+            Maroon<em>&nbsp;Investment&nbsp;Club</em>
           </span>
         </Link>
-        <div className="nav-links">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={active === link.href ? "active" : undefined}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        <a className="btn" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
+          Apply
+        </a>
       </div>
-      <a className="btn" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
-        Apply
-      </a>
+      <div className="nav-links">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={active === link.href ? "active" : undefined}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }

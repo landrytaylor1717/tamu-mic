@@ -11,14 +11,17 @@ export const metadata = {
 // — drop each headshot in with the filename below and it shows up
 // automatically. Until then this renders a plain circle so the page never
 // breaks for a missing file.
+//
+// `linkedin` is optional — add a verified profile URL here and the card
+// becomes a link automatically. No URL, no link: never guess one.
 const leadership = [
-  { photo: "owen", name: "Owen Conkey", meta: "Sophomore, Finance", role: "CIO" },
-  { photo: "dhruv", name: "Dhruv Datta", meta: "Senior, MMET", role: "CIO" },
-  { photo: "landry", name: "Landry Taylor", meta: "Sophomore, MIS", role: "Quant Director" },
-  { photo: "christian", name: "Christian Marquez", meta: "Junior, International Affairs & Master in Finance", role: "COO" },
-  { photo: "diego", name: "Diego Cancino", meta: "Sophomore, Economics and Applied Math", role: "Portfolio Manager" },
-  { photo: "jeremiel", name: "Jeremiel Fernandez", meta: "Junior, Finance and MSF", role: "Portfolio Manager" },
-  { photo: "rishabh", name: "Rishabh Makker", meta: null, role: "Quant PM" },
+  { photo: "owen", name: "Owen Conkey", meta: "Sophomore, Finance", role: "CIO", linkedin: null },
+  { photo: "dhruv", name: "Dhruv Datta", meta: "Senior, MMET", role: "CIO", linkedin: null },
+  { photo: "landry", name: "Landry Taylor", meta: "Sophomore, MIS", role: "Quant Director", linkedin: null },
+  { photo: "christian", name: "Christian Marquez", meta: "Junior, International Affairs & Master in Finance", role: "COO", linkedin: null },
+  { photo: "diego", name: "Diego Cancino", meta: "Sophomore, Economics and Applied Math", role: "Portfolio Manager", linkedin: null },
+  { photo: "jeremiel", name: "Jeremiel Fernandez", meta: "Junior, Finance and MSF", role: "Portfolio Manager", linkedin: null },
+  { photo: "rishabh", name: "Rishabh Makker", meta: null, role: "Quant PM", linkedin: null },
 ];
 
 export default function Leadership() {
@@ -44,14 +47,32 @@ export default function Leadership() {
             </div>
           </div>
           <div className="team-grid">
-            {leadership.map((person) => (
-              <div className="team-card" key={person.photo}>
-                <TeamPhoto src={`/leadership/${person.photo}.jpg`} alt={person.name} />
-                <div className="team-name">{person.name}</div>
-                {person.meta ? <div className="team-meta">{person.meta}</div> : null}
-                <div className="team-role">{person.role}</div>
-              </div>
-            ))}
+            {leadership.map((person) => {
+              const body = (
+                <>
+                  <TeamPhoto src={`/leadership/${person.photo}.jpg`} alt={person.name} />
+                  <div className="team-name">{person.name}</div>
+                  {person.meta ? <div className="team-meta">{person.meta}</div> : null}
+                  <div className="team-role">{person.role}</div>
+                </>
+              );
+              return person.linkedin ? (
+                <a
+                  className="team-card team-card-link"
+                  key={person.photo}
+                  href={person.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${person.name} on LinkedIn`}
+                >
+                  {body}
+                </a>
+              ) : (
+                <div className="team-card" key={person.photo}>
+                  {body}
+                </div>
+              );
+            })}
           </div>
         </section>
       </div>
@@ -61,7 +82,7 @@ export default function Leadership() {
           <h2>Want to run this someday?</h2>
           <p className="cta-note">
             Officer positions open up to members every year. Applications
-            for the fall cohort are open now.
+            open again next semester.
           </p>
           <a className="btn" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
             Apply now

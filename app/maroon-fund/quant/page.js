@@ -49,9 +49,12 @@ export default function Quant() {
             </div>
           </div>
           <div className="index-list">
-            {process.map((step) => (
+            {process.map((step, i) => (
               <div className="index-row" key={step.title}>
-                <div className="index-title">{step.title}</div>
+                <div className="index-title">
+                  <span className="index-step-num">{String(i + 1).padStart(2, "0")}</span>
+                  {step.title}
+                </div>
                 <div className="index-desc">{step.desc}</div>
               </div>
             ))}
@@ -77,7 +80,7 @@ export default function Quant() {
         <div className="wrap cta-inner">
           <h2>Apply to the Quant division.</h2>
           <p className="cta-note">
-            Applications for the fall cohort are open now.
+            Applications open again next semester.
           </p>
           <a className="btn" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
             Apply now

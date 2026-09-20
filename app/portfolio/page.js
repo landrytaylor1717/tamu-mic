@@ -14,38 +14,48 @@ const dir = (n) => (n > 0 ? "up" : n < 0 ? "down" : undefined);
 
 function AllocationTable({ rows, maxWeight, barClass }) {
   return (
-    <>
-      <div className="alloc-head">
-        <span>Holding</span>
-        <span>Allocation</span>
-        <span>Market value</span>
-        <span>Return</span>
-      </div>
-      <div className="alloc-list">
+    <table className="alloc-table">
+      <colgroup>
+        <col style={{ width: "22%" }} />
+        <col style={{ width: "39%" }} />
+        <col style={{ width: "21%" }} />
+        <col style={{ width: "18%" }} />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">Holding</th>
+          <th scope="col">Allocation</th>
+          <th scope="col">Market value</th>
+          <th scope="col">Return</th>
+        </tr>
+      </thead>
+      <tbody>
         {rows.map((row) => (
-          <div className="alloc-row" key={row.key}>
-            <div className="alloc-id">
+          <tr key={row.key}>
+            <th scope="row" className="alloc-id">
               {row.ticker ? <span className="alloc-ticker">{row.ticker}</span> : null}
               <span className="alloc-name">{row.name}</span>
-            </div>
-            <div className="alloc-bar-track">
-              <div
-                className={`alloc-bar-fill${barClass ? ` ${barClass}` : ""}`}
-                style={{ width: `${Math.max((row.weightPct / maxWeight) * 100, 2)}%` }}
-              />
-            </div>
-            <span className="alloc-value">{usd(row.marketValue)}</span>
+            </th>
+            <td>
+              <div className="alloc-bar-track">
+                <div
+                  className={`alloc-bar-fill${barClass ? ` ${barClass}` : ""}`}
+                  style={{ width: `${Math.max((row.weightPct / maxWeight) * 100, 2)}%` }}
+                />
+              </div>
+            </td>
+            <td className="alloc-value">{usd(row.marketValue)}</td>
             {row.totalReturnPct !== undefined ? (
-              <span className={`alloc-return ${dir(row.totalReturnPct)}`}>
+              <td className={`alloc-return ${dir(row.totalReturnPct)}`}>
                 {pct(row.totalReturnPct)}
-              </span>
+              </td>
             ) : (
-              <span className="alloc-weight">{row.weightPct.toFixed(2)}%</span>
+              <td className="alloc-weight">{row.weightPct.toFixed(2)}%</td>
             )}
-          </div>
+          </tr>
         ))}
-      </div>
-    </>
+      </tbody>
+    </table>
   );
 }
 
@@ -160,17 +170,19 @@ export default function Portfolio() {
               </p>
             </div>
           </div>
-          <AllocationTable
-            rows={sortedHoldings.map((h) => ({
-              key: h.ticker,
-              ticker: h.ticker,
-              name: h.name,
-              weightPct: h.weightPct,
-              marketValue: h.marketValue,
-              totalReturnPct: h.totalReturnPct,
-            }))}
-            maxWeight={maxHoldingWeight}
-          />
+          <div className="table-scroll">
+            <AllocationTable
+              rows={sortedHoldings.map((h) => ({
+                key: h.ticker,
+                ticker: h.ticker,
+                name: h.name,
+                weightPct: h.weightPct,
+                marketValue: h.marketValue,
+                totalReturnPct: h.totalReturnPct,
+              }))}
+              maxWeight={maxHoldingWeight}
+            />
+          </div>
           <div className="alloc-foot">
             <span>Total invested value</span>
             <span>{usd(fundStats.investedValue)}</span>
@@ -188,7 +200,9 @@ export default function Portfolio() {
               </p>
             </div>
           </div>
-          <AllocationTable rows={sectors} maxWeight={maxSectorWeight} barClass="sector" />
+          <div className="table-scroll">
+            <AllocationTable rows={sectors} maxWeight={maxSectorWeight} barClass="sector" />
+          </div>
         </section>
       </div>
 

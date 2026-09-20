@@ -267,7 +267,6 @@ function TimelineSection({ items }) {
                 item.title
               )}
             </span>
-            <span className="timeline-tag">{item.tag}</span>
           </div>
           <p className="timeline-desc">{item.desc}</p>
         </div>
@@ -289,8 +288,8 @@ export default function Competitions() {
             Every member is encouraged to compete — from the CFA Institute
             Research Challenge to national stock-pitch invitationals to
             trading and portfolio competitions run out of other
-            universities. It's the fastest way to find out whether a thesis
-            actually holds up in front of people who didn't write it. Below
+            universities. It&apos;s the fastest way to find out whether a thesis
+            actually holds up in front of people who didn&apos;t write it. Below
             is our running database of external competitions, alongside the
             internal pitch we run to pick who represents the fund.
           </p>
@@ -302,9 +301,9 @@ export default function Competitions() {
             <div className="lede-body">
               <h2>Research season</h2>
               <p className="note">
-                Timing reflects last cycle's dates — most of these recur
+                Timing reflects last cycle&apos;s dates — most of these recur
                 annually around the same window, but confirm the current
-                year's deadline on the competition's own site (linked on the
+                year&apos;s deadline on the competition&apos;s own site (linked on the
                 title) before a team commits.
               </p>
             </div>
@@ -320,7 +319,7 @@ export default function Competitions() {
             <div className="lede-body">
               <h2>The competition ladder</h2>
               <p className="note">
-                Same caveat — dates below are last cycle's, confirm before
+                Same caveat — dates below are last cycle&apos;s, confirm before
                 committing.
               </p>
             </div>

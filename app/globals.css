@@ -124,67 +124,64 @@ h2 {
 }
 
 /* ---------- Nav ---------- */
+/* Two fixed rows instead of one wrapping flex row: ten links plus a
+   logo lockup and an Apply button don't fit on one line at most
+   widths, and letting them wrap freely used to push the header to
+   three or four rows depending on viewport. A dedicated (and on
+   narrow screens, horizontally scrollable) links row keeps the
+   header's height predictable everywhere. */
 nav {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 0 22px;
+  padding: 14px 0 0;
   border-bottom: 1px solid var(--rule);
 }
-nav > .btn {
-  align-self: center;
-}
-.nav-left {
+.nav-top {
   display: flex;
   align-items: center;
-  gap: 32px;
-  flex-wrap: wrap;
-  row-gap: 12px;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 12px;
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: var(--ink);
   flex-shrink: 0;
 }
 .mark {
-  height: 30px;
+  height: 26px;
   width: auto;
   display: block;
   flex-shrink: 0;
 }
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
 .brand-name {
   font-family: var(--font-fraunces), serif;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
+  white-space: nowrap;
 }
 .brand-name em {
   font-style: italic;
   color: var(--maroon);
   font-weight: 500;
 }
-.brand-motto {
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  letter-spacing: 0.03em;
-  color: var(--ink);
-  margin-top: 2px;
+nav .btn {
+  padding: 8px 16px;
+  font-size: 12.5px;
+  flex-shrink: 0;
 }
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 22px;
-  flex-wrap: wrap;
-  row-gap: 8px;
+  gap: 20px;
+  padding-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar {
+  display: none;
 }
 /* :not(.btn) — otherwise this (class + element) beats the plain ".btn"
    class selector on specificity and paints the nav's Apply link this
@@ -193,6 +190,8 @@ nav > .btn {
   text-decoration: none;
   font-size: 13.5px;
   color: var(--ink-soft);
+  white-space: nowrap;
+  padding: 4px 0;
   transition: color 0.15s ease;
 }
 .nav-links a:hover:not(.btn),
@@ -201,7 +200,6 @@ nav > .btn {
 }
 .nav-links a.active {
   border-bottom: 1px solid var(--maroon);
-  padding-bottom: 2px;
 }
 .btn {
   display: inline-block;
@@ -641,6 +639,19 @@ section + section {
   max-width: 56ch;
 }
 
+/* An ordered process (idea → position, hypothesis → live strategy) reads
+   as a numbered sequence, not just stacked rows — the number carries
+   real information here (this step happens before that one). Kept as an
+   inline prefix rather than its own grid column so it falls out for
+   free under the existing mobile single-column collapse below. */
+.index-step-num {
+  font-family: var(--font-mono), monospace;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-right: 10px;
+}
+
 /* ---------- Competition timeline ---------- */
 .timeline {
   position: relative;
@@ -658,6 +669,23 @@ section + section {
 .timeline-item {
   position: relative;
   padding-bottom: 36px;
+  padding-left: 4px;
+  margin-left: -4px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+@media (hover: hover) {
+  .timeline-item:hover {
+    transform: translateX(6px);
+    background: linear-gradient(to right, #efe9da, transparent 60%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item {
+    transition: none;
+  }
+  .timeline-item:hover {
+    transform: none;
+  }
 }
 .timeline-item:last-child {
   padding-bottom: 0;
@@ -705,16 +733,6 @@ section + section {
 .timeline-title a:hover {
   color: var(--maroon);
   border-bottom-color: var(--maroon);
-}
-.timeline-tag {
-  font-family: var(--font-mono), monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--brass);
-  border: 1px solid var(--rule);
-  padding: 3px 9px;
-  white-space: nowrap;
 }
 .timeline-desc {
   font-size: 15px;
@@ -1003,6 +1021,27 @@ section + section {
 .team-card {
   text-align: center;
 }
+.team-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  transition: opacity 0.15s ease;
+}
+.team-card-link:hover {
+  opacity: 0.75;
+}
+.team-card-link:hover .team-name,
+.team-card-link:focus-visible .team-name {
+  color: var(--maroon);
+}
+.team-card-link .team-photo {
+  transition: border-color 0.15s ease;
+}
+.team-card-link:hover .team-photo,
+.team-card-link:focus-visible .team-photo {
+  border-color: var(--maroon);
+}
 .team-photo {
   display: block;
   width: 168px;
@@ -1034,43 +1073,56 @@ section + section {
 }
 
 /* ---------- Portfolio allocation (members) ---------- */
-.alloc-head {
-  display: grid;
-  grid-template-columns: 0.55fr 1fr 0.55fr 0.45fr;
-  gap: 20px;
-  padding-bottom: 10px;
+/* Scrolls its own contents on narrow screens instead of the whole page
+   overflowing sideways — a real <table> stays real (and accessible)
+   at every width instead of being restyled into a stack of divs. */
+.table-scroll {
+  overflow-x: auto;
+}
+.alloc-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.alloc-table thead th {
+  padding: 0 20px 10px 0;
   border-bottom: 1px solid var(--ink);
   font-family: var(--font-mono), monospace;
   font-size: 10.5px;
+  font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-align: left;
   color: var(--ink-faint);
 }
-.alloc-head span:not(:first-child) {
+.alloc-table thead th:not(:first-child) {
   text-align: right;
 }
-.alloc-list {
+.alloc-table tbody tr {
+  border-top: 1px solid var(--rule);
+}
+.alloc-table tbody tr:last-child {
   border-bottom: 1px solid var(--rule);
 }
-.alloc-row {
-  display: grid;
-  grid-template-columns: 0.55fr 1fr 0.55fr 0.45fr;
-  gap: 20px;
-  align-items: center;
-  padding: 14px 0;
-  border-top: 1px solid var(--rule);
+.alloc-table td,
+.alloc-table tbody th {
+  padding: 14px 20px 14px 0;
+  vertical-align: middle;
 }
 .alloc-id {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  font-weight: 400;
+  text-align: left;
 }
 .alloc-ticker {
   font-family: var(--font-mono), monospace;
   font-size: 11.5px;
   letter-spacing: 0.03em;
   color: var(--ink-faint);
+  font-weight: 400;
 }
 .alloc-name {
   font-family: var(--font-fraunces), serif;
@@ -1079,6 +1131,7 @@ section + section {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: block;
 }
 .alloc-bar-track {
   height: 7px;
@@ -1226,9 +1279,6 @@ footer {
 }
 
 @media (max-width: 1080px) {
-  .nav-left {
-    gap: 22px;
-  }
   .nav-links {
     gap: 16px;
   }
@@ -1310,18 +1360,8 @@ footer {
     top: 16px;
     right: 16px;
   }
-  .alloc-head {
-    display: none;
-  }
-  .alloc-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 16px 0;
-  }
-  .alloc-value,
-  .alloc-weight,
-  .alloc-return {
-    text-align: left;
+  .alloc-table {
+    min-width: 480px;
   }
   .cta-band {
     padding: 56px 0;
@@ -1344,13 +1384,17 @@ footer {
 
 @media (max-width: 640px) {
   nav {
-    padding: 18px 0;
+    padding: 12px 0 0;
   }
-  .nav-left {
-    gap: 14px;
+  .nav-top {
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+  .brand-name {
+    font-size: 15px;
   }
   .nav-links {
-    gap: 10px 14px;
+    gap: 16px;
     font-size: 13px;
   }
   .page-head {

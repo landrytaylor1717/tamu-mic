@@ -61,7 +61,10 @@ export default function HeroScene() {
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 320);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Capped well under the real device ratio — this scene is fill-rate
+    // heavy (shadows + bloom), and a 3x phone panel buys very little
+    // visible sharpness here for roughly double the pixels of a 1.5 cap.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1107,6 +1110,7 @@ export default function HeroScene() {
     // ---------- camera drift + resize ----------
     let t = 0;
     let raf = 0;
+    let running = false;
     let lastTime = performance.now();
     function tick() {
       const now = performance.now();
@@ -1139,7 +1143,26 @@ export default function HeroScene() {
       camera.position.y = 25 + Math.sin(t * 0.35) * 2;
       camera.lookAt(0, 17, -4);
       composer.render();
+      // Reduced-motion renders exactly one frame (a fixed composition,
+      // since t never advances above) and stops — no reason to keep
+      // driving the GPU every frame for a picture that isn't changing.
+      if (running && !prefersReduced) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        running = false;
+      }
+    }
+
+    function startLoop() {
+      if (running) return;
+      running = true;
+      lastTime = performance.now();
       raf = requestAnimationFrame(tick);
+    }
+    function stopLoop() {
+      running = false;
+      cancelAnimationFrame(raf);
+      raf = 0;
     }
 
     function resize() {
@@ -1155,11 +1178,24 @@ export default function HeroScene() {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas.parentElement);
     resize();
-    tick();
+
+    // Off-tab-view visitors (scrolled past the hero, or the tab isn't
+    // frontmost) shouldn't keep this scene rendering every frame — a
+    // generous rootMargin means the loop resumes just before the hero
+    // scrolls back into view, not the instant a single pixel of it does.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) startLoop();
+        else stopLoop();
+      },
+      { rootMargin: "200px" }
+    );
+    io.observe(canvas.parentElement);
 
     return () => {
       cancelled = true;
-      cancelAnimationFrame(raf);
+      io.disconnect();
+      stopLoop();
       ro.disconnect();
       composer.dispose();
       renderer.dispose();

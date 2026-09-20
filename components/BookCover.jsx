@@ -17,8 +17,8 @@ export default function BookCover({ src }) {
     return <div className="finder-book-cover finder-book-cover-swatch" aria-hidden="true" />;
   }
 
-  // eslint-disable-next-line @next/next/no-img-element
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       className="finder-book-cover"
       src={src}

@@ -11,6 +11,16 @@ export default function TeamPhoto({ src, alt }) {
     return <div className="team-photo" aria-hidden="true" />;
   }
 
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img className="team-photo" src={src} alt={alt} onError={() => setFailed(true)} />;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className="team-photo"
+      src={src}
+      alt={alt}
+      loading="lazy"
+      width={168}
+      height={168}
+      onError={() => setFailed(true)}
+    />
+  );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import HeroScene from "@/components/HeroScene";
+import HeroScene from "@/components/HeroSceneLazy";
 import SitePhoto from "@/components/SitePhoto";
 import { APPLY_FORM_URL, INSTAGRAM_URL } from "@/lib/links";
 
@@ -16,7 +16,7 @@ export default function Home() {
       <HeroScene />
       <div className="hero-scrim" />
       <div className="hero-3d-copy">
-        <div className="hero-kicker">Maroon Fund — est. 2025</div>
+        <div className="hero-kicker">Maroon Fund</div>
         <h1>We manage real money, not a class project.</h1>
         <p>
           The Maroon Fund is run entirely by Texas A&amp;M students, split
@@ -63,14 +63,6 @@ export default function Home() {
               Student-managed,
               <br />
               start to finish
-            </span>
-          </div>
-          <div className="fact">
-            <span className="fact-num">Fall</span>
-            <span className="fact-label">
-              Applications
-              <br />
-              open now
             </span>
           </div>
         </div>
@@ -154,8 +146,8 @@ export default function Home() {
         </div>
 
         <div className="program">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <figure className="program-figure" style={{ margin: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/general-meeting.jpg"
               alt="A member presenting on integrity to the club during a general meeting"
@@ -175,8 +167,8 @@ export default function Home() {
         </div>
 
         <div className="program">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <figure className="program-figure" style={{ margin: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/bootcamp-copart.jpg"
               alt="New members presenting a stock pitch on Copart during Foundations Bootcamp"
@@ -196,8 +188,8 @@ export default function Home() {
         </div>
 
         <div className="program">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <figure className="program-figure" style={{ margin: 0 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/travel-series/austin-1.jpg"
               alt="Members with a Dimensional Fund Advisors host on their Austin office terrace"
@@ -274,8 +266,8 @@ export default function Home() {
         <div className="wrap cta-inner">
           <h2>Ready to manage real capital?</h2>
           <p className="cta-note">
-            Applications for the fall cohort are open now. No finance
-            background required — just curiosity.
+            Applications open again next semester. No finance background
+            required — just curiosity.
           </p>
           <a className="btn" href={APPLY_FORM_URL} target="_blank" rel="noopener noreferrer">
             Apply now
