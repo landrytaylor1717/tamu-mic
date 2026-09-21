@@ -1179,6 +1179,45 @@ section + section {
   fill: var(--ink-faint);
 }
 
+/* Date-scrubber under the chart. Track/thumb sizing lives entirely in
+   browser-specific pseudo-elements for a native <input type="range">,
+   so it can't be set via a plain style prop the way most elements can. */
+.perf-slider {
+  width: 100%;
+  accent-color: var(--maroon);
+  height: 20px;
+  cursor: pointer;
+}
+.perf-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--rule);
+  border-radius: 4px;
+}
+.perf-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--maroon);
+  border: 2px solid var(--paper);
+  margin-top: -5px;
+  cursor: grab;
+}
+.perf-slider::-moz-range-track {
+  height: 8px;
+  background: var(--rule);
+  border-radius: 4px;
+}
+.perf-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--maroon);
+  border: 2px solid var(--paper);
+  cursor: grab;
+}
+
 /* ---------- Sponsors ---------- */
 .sponsor-mark {
   display: flex;

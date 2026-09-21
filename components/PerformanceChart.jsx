@@ -219,13 +219,13 @@ export default function PerformanceChart({ spyPoints, fundPoints, fundMarkers, t
 
       <input
         type="range"
+        className="perf-slider"
         min={0}
         max={lastIndex}
         step={1}
         value={index}
         onChange={(e) => setIndex(Number(e.target.value))}
         aria-label="Scrub to a date to see the Maroon Fund and S&P 500 values on that day"
-        style={{ width: "100%", accentColor: "var(--maroon)" }}
       />
     </div>
   );
