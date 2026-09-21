@@ -58,7 +58,11 @@ export default function HeroScene() {
     // the amount of haze on the buildings the same as before that change.
     scene.fog = new THREE.Fog(0x2a2f52, 78, 185);
 
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 320);
+    // Vertical FOV — see resize() below for how this is held constant only
+    // up to a reference aspect ratio, past which it's the width that gets
+    // held constant instead.
+    const BASE_FOV = 42;
+    const camera = new THREE.PerspectiveCamera(BASE_FOV, 1, 0.1, 320);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     // Capped well under the real device ratio — this scene is fill-rate
@@ -1165,12 +1169,30 @@ export default function HeroScene() {
       raf = 0;
     }
 
+    // .hero-3d is full-bleed (not capped by .wrap like the rest of the
+    // page), so its aspect ratio grows a lot on wide monitors. A fixed
+    // vertical FOV under a growing aspect ratio widens the *horizontal*
+    // FOV to match — the camera pulls back and reveals more of the scene
+    // sideways instead of the buildings simply getting bigger, spreading
+    // them out with empty gaps. Past MAX_ASPECT, hold the horizontal FOV
+    // (from MAX_ASPECT) constant instead and shrink the vertical FOV to
+    // match — the extra width just crops sky/ground top and bottom,
+    // rather than composing more of the scene into frame.
+    const MAX_ASPECT = 1.9;
     function resize() {
       const parent = canvas.parentElement;
       const w = parent.clientWidth;
       const h = parent.clientHeight;
       if (w === 0 || h === 0) return; // avoids a zero-size framebuffer while the pane is hidden/collapsing
-      camera.aspect = w / h;
+      const aspect = w / h;
+      if (aspect > MAX_ASPECT) {
+        const baseVFovRad = (BASE_FOV * Math.PI) / 180;
+        const hFovAtMax = 2 * Math.atan(Math.tan(baseVFovRad / 2) * MAX_ASPECT);
+        camera.fov = (2 * Math.atan(Math.tan(hFovAtMax / 2) / aspect) * 180) / Math.PI;
+      } else {
+        camera.fov = BASE_FOV;
+      }
+      camera.aspect = aspect;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
       composer.setSize(w, h);
