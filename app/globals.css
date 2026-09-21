@@ -130,16 +130,15 @@ h2 {
    three or four rows depending on viewport. A dedicated (and on
    narrow screens, horizontally scrollable) links row keeps the
    header's height predictable everywhere. */
+/* One row: brand, then links (scrolling on its own if there's no room),
+   then Apply pinned to the end — instead of stacking brand+Apply above
+   a second links row. */
 nav {
-  padding: 14px 0 0;
-  border-bottom: 1px solid var(--rule);
-}
-.nav-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding-bottom: 12px;
+  gap: 28px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
 }
 .brand {
   display: flex;
@@ -150,14 +149,14 @@ nav {
   flex-shrink: 0;
 }
 .mark {
-  height: 26px;
+  height: 24px;
   width: auto;
   display: block;
   flex-shrink: 0;
 }
 .brand-name {
   font-family: var(--font-fraunces), serif;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
@@ -176,7 +175,8 @@ nav .btn {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding-bottom: 10px;
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -1384,14 +1384,11 @@ footer {
 
 @media (max-width: 640px) {
   nav {
-    padding: 12px 0 0;
-  }
-  .nav-top {
-    gap: 12px;
-    padding-bottom: 10px;
+    padding: 12px 0;
+    gap: 14px;
   }
   .brand-name {
-    font-size: 15px;
+    display: none;
   }
   .nav-links {
     gap: 16px;
