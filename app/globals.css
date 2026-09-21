@@ -1142,7 +1142,7 @@ section + section {
   display: block;
 }
 .alloc-bar-track {
-  height: 7px;
+  height: 11px;
   background: var(--rule);
 }
 .alloc-bar-fill {
