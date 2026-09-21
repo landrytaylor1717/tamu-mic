@@ -258,9 +258,17 @@ nav .btn {
 }
 
 /* ---------- Hero (home) — full-bleed 3D scene ---------- */
+/* A fixed height here never grows on a tall viewport, so on a large
+   monitor the hero reads as a short strip with the next section
+   already visible underneath — pinned at 780px (today's height) up to
+   normal screens, then scales with viewport height past that instead
+   of staying flat. The 3D camera's own resize() (see HeroScene.jsx)
+   already reads this container's real height every time it changes,
+   so it recomposes the scene correctly for whatever height lands
+   here. */
 .hero-3d {
   position: relative;
-  height: 780px;
+  height: clamp(780px, 58vh, 960px);
   overflow: hidden;
   background: #100d0a; /* shown while WebGL loads, and as the no-WebGL fallback */
 }
