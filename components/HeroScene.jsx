@@ -41,13 +41,13 @@ export default function HeroScene() {
       c.height = 320;
       const ctx = c.getContext("2d");
       const g = ctx.createLinearGradient(0, 0, 0, 320);
-      g.addColorStop(0.0, "#140b22");
-      g.addColorStop(0.24, "#241033");
-      g.addColorStop(0.42, "#3a1730");
-      g.addColorStop(0.58, "#7a2f3a");
-      g.addColorStop(0.72, "#c1553a");
-      g.addColorStop(0.85, "#e8873f");
-      g.addColorStop(1.0, "#f6c979");
+      g.addColorStop(0.0, "#0a0e1f");
+      g.addColorStop(0.24, "#151c35");
+      g.addColorStop(0.42, "#2a2f52");
+      g.addColorStop(0.58, "#4a3f5e");
+      g.addColorStop(0.72, "#6b4a5a");
+      g.addColorStop(0.85, "#9a5f52");
+      g.addColorStop(1.0, "#c98a5f");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, 8, 320);
       return new THREE.CanvasTexture(c);
@@ -56,7 +56,7 @@ export default function HeroScene() {
     // near/far pushed out to match the camera sitting farther back (see
     // tick()) — keeping the same offset from the camera's distance keeps
     // the amount of haze on the buildings the same as before that change.
-    scene.fog = new THREE.Fog(0x3a1730, 78, 185);
+    scene.fog = new THREE.Fog(0x2a2f52, 78, 185);
 
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 320);
 
