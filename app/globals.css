@@ -137,7 +137,7 @@ nav {
   display: flex;
   align-items: center;
   gap: 28px;
-  padding: 20px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--rule);
 }
 .brand {
@@ -174,7 +174,7 @@ nav .btn {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   flex: 1;
   min-width: 0;
   overflow-x: auto;
@@ -188,7 +188,7 @@ nav .btn {
    muted color instead of the white .btn sets it to. */
 .nav-links a:not(.btn) {
   text-decoration: none;
-  font-size: 16px;
+  font-size: 13.5px;
   color: var(--ink-soft);
   white-space: nowrap;
   padding: 4px 0;
