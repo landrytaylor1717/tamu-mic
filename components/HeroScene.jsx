@@ -446,7 +446,12 @@ export default function HeroScene() {
       // be able to take down every other model queued in this batch.
       try {
         void esbModel; // our own build, kept loaded but swapped out below for comparison
-        const esbMerged = mergeModelByMaterial(esbChatgptModel.clone(true), ["ground", "road"]);
+        // "background_*" and "city_*" are plain, unnamed filler towers this
+        // source file bundles around the real tower — generic boxes with no
+        // resemblance to any actual building, not landmarks in their own
+        // right, so they're dropped the same way Chrysler's "NYC companion"
+        // meshes are.
+        const esbMerged = mergeModelByMaterial(esbChatgptModel.clone(true), ["ground", "road", "background", "city"]);
         const esb = toonifyModel(esbMerged);
         esb.rotation.x = -Math.PI / 2; // same source-file up-axis quirk as Kyle Field/Academic Building
         fitHeight(esb, 42);
@@ -460,7 +465,11 @@ export default function HeroScene() {
       // One World Trade Center — new NYC landmark, same ChatGPT pipeline
       // and same two fixes as everything else from it.
       try {
-        const owtcMerged = mergeModelByMaterial(owtcModel.clone(true), ["ground", "road"]);
+        // "Bldg_*"/"BldgCap_*" are plain filler towers this source file
+        // bundles around the real tower (same idea as Chrysler's "NYC
+        // companion" meshes and ESB's "background_*"/"city_*" ones) — dropped
+        // so only the real One World Trade Center tower renders.
+        const owtcMerged = mergeModelByMaterial(owtcModel.clone(true), ["ground", "road", "bldg"]);
         const owtc = toonifyModel(owtcMerged);
         owtc.rotation.x = -Math.PI / 2;
         fitHeight(owtc, 46); // real 1WTC is taller than the Empire State Building
