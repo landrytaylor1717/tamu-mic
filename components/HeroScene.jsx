@@ -461,14 +461,19 @@ export default function HeroScene() {
         const esb = toonifyModel(esbMerged);
         esb.rotation.x = -Math.PI / 2; // same source-file up-axis quirk as Kyle Field/Academic Building
         fitHeight(esb, 42);
-        // Pushed to the deepest background band on this side — behind OWTC
-        // (z=-18) and even behind Woolworth/JPMorgan (z=-50) — so fog and
-        // distance carry it the way they already do for OWTC/Kyle Field,
-        // instead of it competing with Chrysler/40 Wall St for foreground
-        // space. Its old midground slot (x=-26, z=14) now belongs to 40
-        // Wall Street.
-        esb.position.x = -26;
-        esb.position.z = -72;
+        // Background tier, behind OWTC (z=-18) — same depth as
+        // Woolworth/JPMorgan (z=-50), not deeper: pushing it back further
+        // to z=-72 (verified via a real cropped render, not just the
+        // bounding box) put it so deep into the fog falloff that it faded
+        // to a pale, barely-legible smudge — technically "pushed back" but
+        // unrecognizable as a building, which read as nothing having
+        // happened. z=-50 keeps it clearly a background tower instead of
+        // a ghost. Also isolated far to the west (x=-96, past Woolworth's
+        // own left edge at x=-74) — ESB's real stepped base tier alone is
+        // ~38 units wide, wide enough that any x near the existing
+        // OWTC/Woolworth/JPMorgan cluster collided with one of them.
+        esb.position.x = -96;
+        esb.position.z = -50;
         nyc.add(esb);
       } catch (e) {
         console.error("ESB failed to place — rest of the scene still loads", e);
@@ -1112,15 +1117,15 @@ export default function HeroScene() {
     scene.add(nyc);
 
     // Sized/positioned to cover every NYC landmark's real footprint,
-    // including the deep-background pair (Woolworth, JPMorgan) out past
-    // x=-60/z=-45, and now the Empire State Building pushed back to
-    // z=-72 — each time a landmark's placement has outrun this plane's
-    // edge it rendered floating with no ground underneath it, so this
-    // needs re-checking against the deepest current placement whenever
+    // including the deep-background trio (Woolworth, JPMorgan, ESB) out
+    // past x=-60/z=-45, and ESB's own isolated spot out past x=-115 —
+    // each time a landmark's placement has outrun this plane's edge it
+    // rendered floating with no ground underneath it, so this needs
+    // re-checking against the widest/deepest current placement whenever
     // one moves.
-    const groundNyc = new THREE.Mesh(new THREE.PlaneGeometry(90, 160), toon(0x2b2823));
+    const groundNyc = new THREE.Mesh(new THREE.PlaneGeometry(130, 160), toon(0x2b2823));
     groundNyc.rotation.x = -Math.PI / 2;
-    groundNyc.position.set(-40, -0.06, -20);
+    groundNyc.position.set(-58, -0.06, -20);
     groundNyc.receiveShadow = true;
     scene.add(groundNyc);
 
