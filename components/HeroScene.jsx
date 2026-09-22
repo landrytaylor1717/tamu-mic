@@ -404,6 +404,7 @@ export default function HeroScene() {
               "/models/brooklyn-bridge.glb",
               "/models/40-wall-street.glb",
               "/models/guggenheim-museum.glb",
+              "/models/vessel.glb",
             ])
             // load errors are tagged with their URL before rejecting — a
             // silent Promise.all rejection here used to take down every
@@ -440,6 +441,7 @@ export default function HeroScene() {
         brooklynBridgeModel,
         wallStreet40Model,
         guggenheimModel,
+        vesselModel,
       ] = models;
 
       // Empire State Building — modeled in Blender (bevel/array/boolean
@@ -660,17 +662,42 @@ export default function HeroScene() {
       // contrast against the skyscrapers around it, the same role
       // Flatiron plays with its own short, distinctive silhouette. Kept
       // modest in scale to match its real (much shorter) height, tucked
-      // into its own lane clear of every other footprint.
+      // into its own lane clear of every other footprint (measured via
+      // each landmark's actual rendered bounding box — z=6 originally
+      // overlapped OWTC's own oversized footprint by a few units; z=12
+      // clears it).
       try {
         const guggenheimMerged = mergeModelByMaterial(guggenheimModel.clone(true));
         const guggenheim = toonifyModel(guggenheimMerged);
         guggenheim.rotation.x = -Math.PI / 2;
         fitHeight(guggenheim, 10);
         guggenheim.position.x = -46;
-        guggenheim.position.z = 6;
+        guggenheim.position.z = 12;
         nyc.add(guggenheim);
       } catch (e) {
         console.error("Guggenheim Museum failed to place — rest of the scene still loads", e);
+      }
+
+      // The Vessel — real Hudson Yards landmark (2019), the honeycomb
+      // spiral staircase structure. Clean building-only asset (real
+      // copper/glass/stone materials, no bundled scenery — the "plinth"
+      // parts are its own real stone base, not display props). Placed in
+      // the open foreground beyond Chrysler/Flatiron's own depth band,
+      // clear of the bull/bear critters' walking lane (z between -42 and
+      // 0) since it sits well past z=0. Offset in x from Chrysler's own
+      // x=-14 — sharing that x lined the two up along the same camera
+      // sightline (Vessel is the closer of the two), which read as one
+      // merged silhouette instead of two distinct buildings.
+      try {
+        const vesselMerged = mergeModelByMaterial(vesselModel.clone(true));
+        const vessel = toonifyModel(vesselMerged);
+        vessel.rotation.x = -Math.PI / 2;
+        fitHeight(vessel, 14); // shorter than the skyscrapers, taller than Guggenheim/Flatiron
+        vessel.position.x = -24;
+        vessel.position.z = 46;
+        nyc.add(vessel);
+      } catch (e) {
+        console.error("The Vessel failed to place — rest of the scene still loads", e);
       }
 
       // ---------- Campus layout ----------
@@ -1086,11 +1113,14 @@ export default function HeroScene() {
 
     // Sized/positioned to cover every NYC landmark's real footprint,
     // including the deep-background pair (Woolworth, JPMorgan) out past
-    // x=-60/z=-45 — the old 60x90 plane ended short of them and they
-    // rendered floating with no ground underneath.
-    const groundNyc = new THREE.Mesh(new THREE.PlaneGeometry(90, 110), toon(0x2b2823));
+    // x=-60/z=-45, and now the Empire State Building pushed back to
+    // z=-72 — each time a landmark's placement has outrun this plane's
+    // edge it rendered floating with no ground underneath it, so this
+    // needs re-checking against the deepest current placement whenever
+    // one moves.
+    const groundNyc = new THREE.Mesh(new THREE.PlaneGeometry(90, 160), toon(0x2b2823));
     groundNyc.rotation.x = -Math.PI / 2;
-    groundNyc.position.set(-40, -0.06, -10);
+    groundNyc.position.set(-40, -0.06, -20);
     groundNyc.receiveShadow = true;
     scene.add(groundNyc);
 
@@ -1261,7 +1291,7 @@ export default function HeroScene() {
       ref={canvasRef}
       className="hero-canvas"
       role="img"
-      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, 40 Wall Street, JPMorgan Chase's 270 Park Avenue, the Guggenheim Museum, the Brooklyn Bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
+      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, 40 Wall Street, JPMorgan Chase's 270 Park Avenue, the Guggenheim Museum, the Vessel, the Brooklyn Bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
     />
   );
 }
