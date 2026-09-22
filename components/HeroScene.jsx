@@ -397,11 +397,13 @@ export default function HeroScene() {
               "/models/chrysler-building-v2.glb",
               "/models/aggieland-water-tower.glb",
               "/models/flatiron-building.glb",
-              "/models/woolworth-building.glb",
+              "/models/woolworth-building-v2.glb",
               "/models/century-tree.glb",
               "/models/jpmorgan-270-park.glb",
               "/models/wehner-building.glb",
               "/models/brooklyn-bridge.glb",
+              "/models/40-wall-street.glb",
+              "/models/guggenheim-museum.glb",
             ])
             // load errors are tagged with their URL before rejecting — a
             // silent Promise.all rejection here used to take down every
@@ -436,6 +438,8 @@ export default function HeroScene() {
         jpmorganModel,
         wehnerModel,
         brooklynBridgeModel,
+        wallStreet40Model,
+        guggenheimModel,
       ] = models;
 
       // Empire State Building — modeled in Blender (bevel/array/boolean
@@ -455,8 +459,14 @@ export default function HeroScene() {
         const esb = toonifyModel(esbMerged);
         esb.rotation.x = -Math.PI / 2; // same source-file up-axis quirk as Kyle Field/Academic Building
         fitHeight(esb, 42);
-        esb.position.x = -26; // midground — clear depth band between OWTC (background) and Chrysler (foreground)
-        esb.position.z = 14;
+        // Pushed to the deepest background band on this side — behind OWTC
+        // (z=-18) and even behind Woolworth/JPMorgan (z=-50) — so fog and
+        // distance carry it the way they already do for OWTC/Kyle Field,
+        // instead of it competing with Chrysler/40 Wall St for foreground
+        // space. Its old midground slot (x=-26, z=14) now belongs to 40
+        // Wall Street.
+        esb.position.x = -26;
+        esb.position.z = -72;
         nyc.add(esb);
       } catch (e) {
         console.error("ESB failed to place — rest of the scene still loads", e);
@@ -468,8 +478,23 @@ export default function HeroScene() {
         // "Bldg_*"/"BldgCap_*" are plain filler towers this source file
         // bundles around the real tower (same idea as Chrysler's "NYC
         // companion" meshes and ESB's "background_*"/"city_*" ones) — dropped
-        // so only the real One World Trade Center tower renders.
-        const owtcMerged = mergeModelByMaterial(owtcModel.clone(true), ["ground", "road", "bldg"]);
+        // so only the real One World Trade Center tower renders. The file
+        // also bundles its own 9/11 Memorial plaza dressing (a reflecting
+        // pool, a lamp post + glow sprite, a plaza plinth, planted trees) —
+        // authored at plaza scale right at the tower's base, so once
+        // fitHeight rescales the whole group to the tower's height those
+        // small props blow up disproportionately and read as flat squares
+        // hovering in the air. Dropped for the same reason as the filler
+        // towers: they're not the landmark itself.
+        const owtcMerged = mergeModelByMaterial(owtcModel.clone(true), [
+          "ground",
+          "road",
+          "bldg",
+          "lamp",
+          "pool",
+          "plaza",
+          "tree_",
+        ]);
         const owtc = toonifyModel(owtcMerged);
         owtc.rotation.x = -Math.PI / 2;
         fitHeight(owtc, 46); // real 1WTC is taller than the Empire State Building
@@ -524,67 +549,19 @@ export default function HeroScene() {
       }
 
       // Woolworth Building — real 1913 Gothic-revival "Cathedral of
-      // Commerce." Source file bundles no ground/road plane of its own;
-      // the only non-building parts are a maroon presentation axis/plinth
-      // added purely for this render. Its own real (measured) footprint
-      // collides with OWTC's oversized footprint at any depth alongside
-      // it, so it's pushed further back than OWTC instead — deep
-      // background, hazier with distance/fog, verified on-screen (camera
-      // frustum widens with depth, same reason OWTC's own wide footprint
-      // stays in frame this far off-center).
-      // Same vertex-color technique as the new Chrysler render (no
-      // materials at all — color is baked per-vertex) — this is the
-      // model's actual authored coloring (stone, windows, crown, copper
-      // roof each their real tone), not a substitute tint.
-      // The 15 "front_pier"/"side_pier" facade columns are excluded below —
-      // in this source file they each run the full z=40-to-76.5 span,
-      // well past where the shaft actually narrows into the crown
-      // (crown geometry starts around z=60), so they stuck out as
-      // detached vertical strips alongside the tapered crown instead of
-      // stopping at the shaft — the "components floating on top of each
-      // other" look. Not a position/merge bug; the piers are just
-      // authored taller than the shaft they're meant to sit on.
+      // Commerce." Replaced with a cleaner "hero final" export: real
+      // materials (stone/terracotta/copper/gold/glass), pre-merged to one
+      // mesh per material already, so it needs neither the vertex-color
+      // pipeline nor the two hand-authored gap-filler boxes the previous
+      // export required. Its own real (measured) footprint collides with
+      // OWTC's oversized footprint at any depth alongside it, so it's
+      // pushed further back than OWTC instead — deep background, hazier
+      // with distance/fog, verified on-screen (camera frustum widens with
+      // depth, same reason OWTC's own wide footprint stays in frame this
+      // far off-center).
       try {
-        const woolworthMerged = mergeModelPreservingVertexColors(woolworthModel.clone(true), [
-          "maroon_axis",
-          "maroon_presentation_plinth",
-          "front_pier",
-          "side_pier",
-        ]);
-        // The source file itself has a real gap between the wide
-        // "shoulder" tier (tops out at local z≈19.65) and the tapering
-        // shaft above it (solid wall doesn't resume until z≈26.6) — that
-        // band has only sparse windows/a thin trim band, no backing
-        // wall, so the sky shows straight through. Plugs it with a
-        // plain box sized to the narrower (shaft-side) footprint so it
-        // stays hidden behind the wider shoulder below, colored to match
-        // the shaft's own sampled vertex tone.
-        const gapFiller = new THREE.Mesh(
-          new THREE.BoxGeometry(9.6, 12, 6.95),
-          new THREE.MeshToonMaterial({ color: 0xb6ae97, gradientMap })
-        );
-        gapFiller.position.set(0, 0, 23.1);
-        gapFiller.castShadow = true;
-        gapFiller.receiveShadow = true;
-        woolworthMerged.add(gapFiller);
-        // A second gap, same cause: the four corner turret columns (the
-        // "columns on each corner" above the main tower) sit at
-        // z=65.6-70.2, but the shaft below them stops at z=62.6.
-        // crown_lower/crown_cornice sit in this band too, but visibly
-        // read as thin decorative moldings rather than a solid disc —
-        // confirmed by pulling the model up close: four small corner-only
-        // fillers left an open gap spanning most of the width, not just
-        // the corners. Replaced with one full-width filler across the
-        // whole band, same approach as the base/shaft gap below it.
-        const crownGapFiller = new THREE.Mesh(
-          new THREE.BoxGeometry(8.8, 11.2, 4.5),
-          new THREE.MeshToonMaterial({ color: 0xc1b9a7, gradientMap })
-        );
-        crownGapFiller.position.set(0, 0, 63.85);
-        crownGapFiller.castShadow = true;
-        crownGapFiller.receiveShadow = true;
-        woolworthMerged.add(crownGapFiller);
-        const woolworth = woolworthMerged;
+        const woolworthMerged = mergeModelByMaterial(woolworthModel.clone(true));
+        const woolworth = toonifyModel(woolworthMerged);
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
         woolworth.position.x = -68;
@@ -658,6 +635,42 @@ export default function HeroScene() {
         nyc.add(jpmorgan);
       } catch (e) {
         console.error("JPMorgan 270 Park failed to place — rest of the scene still loads", e);
+      }
+
+      // 40 Wall Street (the Trump Building) — real 1930 Art Deco landmark,
+      // briefly the world's tallest building that same year; its stepped
+      // pyramidal roof and cathedral-lantern spire are the recognizable
+      // silhouette. Clean building-only asset (real materials, no bundled
+      // scenery), so it needs no exclude list. Takes over ESB's old
+      // midground slot now that ESB has moved to the deep background.
+      try {
+        const wallStreet40Merged = mergeModelByMaterial(wallStreet40Model.clone(true));
+        const wallStreet40 = toonifyModel(wallStreet40Merged);
+        wallStreet40.rotation.x = -Math.PI / 2;
+        fitHeight(wallStreet40, 36); // shorter than Chrysler/Woolworth, matching its real relative height
+        wallStreet40.position.x = -26;
+        wallStreet40.position.z = 14;
+        nyc.add(wallStreet40);
+      } catch (e) {
+        console.error("40 Wall Street failed to place — rest of the scene still loads", e);
+      }
+
+      // Guggenheim Museum — Frank Lloyd Wright's spiral rotunda. Real,
+      // low, wide building-only asset (no bundled scenery) — a deliberate
+      // contrast against the skyscrapers around it, the same role
+      // Flatiron plays with its own short, distinctive silhouette. Kept
+      // modest in scale to match its real (much shorter) height, tucked
+      // into its own lane clear of every other footprint.
+      try {
+        const guggenheimMerged = mergeModelByMaterial(guggenheimModel.clone(true));
+        const guggenheim = toonifyModel(guggenheimMerged);
+        guggenheim.rotation.x = -Math.PI / 2;
+        fitHeight(guggenheim, 10);
+        guggenheim.position.x = -46;
+        guggenheim.position.z = 6;
+        nyc.add(guggenheim);
+      } catch (e) {
+        console.error("Guggenheim Museum failed to place — rest of the scene still loads", e);
       }
 
       // ---------- Campus layout ----------
@@ -1248,7 +1261,7 @@ export default function HeroScene() {
       ref={canvasRef}
       className="hero-canvas"
       role="img"
-      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, JPMorgan Chase's 270 Park Avenue, the Brooklyn Bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
+      aria-label="A cinematic low-poly 3D scene where the New York City skyline — anchored by the Empire State Building, One World Trade Center, the Chrysler Building, the Woolworth Building, the Flatiron Building, 40 Wall Street, JPMorgan Chase's 270 Park Avenue, the Guggenheim Museum, the Brooklyn Bridge, and a bronze Wall Street bull statue, with a bull and a bear pacing the sidewalk — gives way across a maroon dividing road to the Texas A&M campus at dusk: Kyle Field's tiered bowl, the domed Academic Building, the Albritton Bell Tower, the Aggieland water tower, and the Century Tree, under a gradient sunset sky with stars."
     />
   );
 }
