@@ -85,7 +85,7 @@ h2 {
 }
 .ticker-track {
   display: inline-flex;
-  padding: 12px 0;
+  padding: 15px 0;
   animation: scroll-left 160s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -100,7 +100,7 @@ h2 {
    class selectors on specificity, silently graying out every color. */
 .ticker-track > span {
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: 13.5px;
   letter-spacing: 0.01em;
   color: #c4bdaf;
   padding: 0 28px;
