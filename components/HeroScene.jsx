@@ -654,15 +654,19 @@ export default function HeroScene() {
       // briefly the world's tallest building that same year; its stepped
       // pyramidal roof and cathedral-lantern spire are the recognizable
       // silhouette. Clean building-only asset (real materials, no bundled
-      // scenery), so it needs no exclude list. Takes over ESB's old
-      // midground slot now that ESB has moved to the deep background.
+      // scenery), so it needs no exclude list. Pulled back to the same
+      // z=-50 depth tier as ESB/Woolworth/JPMorgan — sits in the one gap
+      // that tier still had open, between JPMorgan's right edge (x=-50.3)
+      // and ESB's own very wide footprint (left edge x=-33.7); ESB's box
+      // alone spans nearly the whole center of that tier, so this was
+      // the only x left there that didn't collide with one of the three.
       try {
         const wallStreet40Merged = mergeModelByMaterial(wallStreet40Model.clone(true));
         const wallStreet40 = toonifyModel(wallStreet40Merged);
         wallStreet40.rotation.x = -Math.PI / 2;
         fitHeight(wallStreet40, 36); // shorter than Chrysler/Woolworth, matching its real relative height
-        wallStreet40.position.x = -26;
-        wallStreet40.position.z = 14;
+        wallStreet40.position.x = -42;
+        wallStreet40.position.z = -50;
         nyc.add(wallStreet40);
       } catch (e) {
         console.error("40 Wall Street failed to place — rest of the scene still loads", e);
