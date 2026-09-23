@@ -471,16 +471,17 @@ section + section {
 }
 .lede {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 36px;
-  margin-bottom: 24px;
+  grid-template-columns: 130px 1fr;
+  column-gap: 40px;
+  margin-bottom: 28px;
 }
 .lede-kicker {
-  font-family: var(--font-fraunces), serif;
-  font-style: italic;
-  font-size: 18px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--ink-faint);
-  padding-top: 3px;
+  padding-top: 4px;
 }
 .lede-body h2 {
   margin-bottom: 8px;
@@ -513,29 +514,32 @@ section + section {
   max-width: 58ch;
 }
 
-/* ---------- History / Mission split ---------- */
-.split-two {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--rule);
+/* ---------- Narrative (replaces the old bordered .split-two / .divisions) ---------- */
+.narrative {
+  margin-left: 170px;
 }
-.split-two > div {
-  padding: 22px 28px 0 0;
+.narrative-item + .narrative-item {
+  margin-top: 22px;
 }
-.split-two > div + div {
-  padding-left: 28px;
-  border-left: 1px solid var(--rule);
+.narrative-label {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 6px;
 }
-.split-two h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-.split-two p {
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--ink-soft);
+.narrative p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
   margin: 0;
-  max-width: 48ch;
+  max-width: 68ch;
+}
+.narrative-item .link-cta {
+  display: inline-block;
+  margin-top: 10px;
 }
 .dropcap::first-letter {
   font-family: var(--font-fraunces), serif;
@@ -546,33 +550,6 @@ section + section {
   padding-right: 8px;
   padding-top: 4px;
   color: var(--maroon);
-}
-
-/* ---------- Divisions ---------- */
-.divisions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--rule);
-}
-.division {
-  padding: 22px 28px 0 0;
-}
-.division + .division {
-  padding-left: 28px;
-  border-left: 1px solid var(--rule);
-}
-.division-name {
-  font-family: var(--font-fraunces), serif;
-  font-size: 22px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-.division p {
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--ink-soft);
-  margin: 0 0 14px;
-  max-width: 46ch;
 }
 
 /* ---------- Programs — alternating feature rows ---------- */
@@ -1391,19 +1368,8 @@ footer {
     gap: 12px;
     margin-bottom: 32px;
   }
-  .split-two,
-  .divisions {
-    grid-template-columns: 1fr;
-  }
-  .split-two > div,
-  .division {
-    padding: 24px 0;
-  }
-  .split-two > div + div,
-  .division + .division {
-    padding: 24px 0 0;
-    border-left: none;
-    border-top: 1px solid var(--rule);
+  .narrative {
+    margin-left: 0;
   }
   .program,
   .program:nth-child(even) {

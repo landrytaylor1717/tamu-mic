@@ -30,9 +30,9 @@ export default function About() {
               <h2>History &amp; mission</h2>
             </div>
           </div>
-          <div className="split-two">
-            <div>
-              <h3>Our history</h3>
+          <div className="narrative">
+            <div className="narrative-item">
+              <span className="narrative-label">Our history</span>
               <p className="dropcap">
                 Founded by students who wanted hands-on experience the
                 classroom couldn&apos;t offer, the
@@ -41,8 +41,8 @@ export default function About() {
                 network across banking, asset management, and technology.
               </p>
             </div>
-            <div>
-              <h3>Our mission</h3>
+            <div className="narrative-item">
+              <span className="narrative-label">Our mission</span>
               <p>
                 We exist to help members think independently and rigorously
                 about investing, and to make sure that thinking translates

@@ -75,9 +75,9 @@ export default function Home() {
             <h2>History &amp; mission</h2>
           </div>
         </div>
-        <div className="split-two">
-          <div>
-            <h3>Our history</h3>
+        <div className="narrative">
+          <div className="narrative-item">
+            <span className="narrative-label">Our history</span>
             <p className="dropcap">
               Founded by students who wanted hands-on experience the
               classroom couldn&apos;t offer, the Maroon
@@ -86,8 +86,8 @@ export default function Home() {
               banking, asset management, and technology.
             </p>
           </div>
-          <div>
-            <h3>Our mission</h3>
+          <div className="narrative-item">
+            <span className="narrative-label">Our mission</span>
             <p>
               We exist to help members think independently and rigorously
               about investing, and to make sure that thinking translates
@@ -110,9 +110,9 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className="divisions" id="funds">
-          <div className="division">
-            <div className="division-name">Equities</div>
+        <div className="narrative" id="funds">
+          <div className="narrative-item">
+            <span className="narrative-label">Equities</span>
             <p>
               Members research individual companies, build models, and pitch
               positions to the fund. It&apos;s the closest thing on campus to
@@ -122,8 +122,8 @@ export default function Home() {
               See the Equities division
             </Link>
           </div>
-          <div className="division">
-            <div className="division-name">Quant</div>
+          <div className="narrative-item">
+            <span className="narrative-label">Quant</span>
             <p>
               Members design, backtest, and deploy data-driven trading
               strategies, pulling in statistics, programming, and market
