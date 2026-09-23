@@ -462,17 +462,22 @@ export default function HeroScene() {
         esb.rotation.x = -Math.PI / 2; // same source-file up-axis quirk as Kyle Field/Academic Building
         fitHeight(esb, 42);
         // Background tier, behind OWTC (z=-18) — same depth as
-        // Woolworth/JPMorgan (z=-50), not deeper: pushing it back further
-        // to z=-72 (verified via a real cropped render, not just the
-        // bounding box) put it so deep into the fog falloff that it faded
-        // to a pale, barely-legible smudge — technically "pushed back" but
-        // unrecognizable as a building, which read as nothing having
-        // happened. z=-50 keeps it clearly a background tower instead of
-        // a ghost. Also isolated far to the west (x=-96, past Woolworth's
-        // own left edge at x=-74) — ESB's real stepped base tier alone is
-        // ~38 units wide, wide enough that any x near the existing
-        // OWTC/Woolworth/JPMorgan cluster collided with one of them.
-        esb.position.x = -96;
+        // Woolworth/JPMorgan (z=-50), not deeper: z=-72 put it so deep
+        // into the fog falloff that it faded to a pale, barely-legible
+        // smudge. z=-50 keeps it a clearly readable background tower.
+        // x=-14, not further west: at z=-50, ESB's own z-range already
+        // clears OWTC's (max z=2.6) regardless of x — no bounding-box
+        // collision either way — so the earlier x=-96 was solving a
+        // problem (visual occlusion by OWTC) that z-separation alone
+        // already handles, at the cost of a much bigger one: measured
+        // against the actual rendered canvas width (not an artificially
+        // widened test viewport), x=-96 projects entirely off-screen —
+        // negative screen-x across its whole bounding box, fully outside
+        // the visible frame at realistic widths. x=-14 keeps it on-screen
+        // and still clear of Woolworth/JPMorgan/the bridge/the critters'
+        // walking lane (verified against each one's own measured
+        // footprint).
+        esb.position.x = -14;
         esb.position.z = -50;
         nyc.add(esb);
       } catch (e) {
