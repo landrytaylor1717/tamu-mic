@@ -91,6 +91,7 @@ h2 {
 .ticker-fade-wrap {
   position: absolute;
   inset: 0;
+  z-index: 1; /* .ticker-track's animated transform promotes it to its own layer, which paints above later DOM siblings that lack an explicit z-index */
   pointer-events: none;
 }
 .ticker-fade {
