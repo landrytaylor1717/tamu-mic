@@ -692,23 +692,18 @@ export default function HeroScene() {
       // The Vessel — real Hudson Yards landmark (2019), the honeycomb
       // spiral staircase structure. Clean building-only asset (real
       // copper/glass/stone materials, no bundled scenery — the "plinth"
-      // parts are its own real stone base, not display props). Pulled
-      // much deeper this round (from z=40 to z=-36) and shifted from
-      // x=-18 to x=-10 — that x clears OWTC's own right edge (x=-18.3),
-      // the same trick Chrysler uses one tier ahead of it. The specific
-      // depth (z=-36, not deeper) is the gap between Chrysler's new
-      // footprint (front edge z=-21.4, since they now share x-space) and
-      // ESB's much wider one further back (rear-facing edge z=-44.2) —
-      // there wasn't room to also push this one as far back as ESB
-      // without colliding with it. Still clear of the bull/bear
-      // critters' patrol lane (z between -42 and 0, near x=0).
+      // parts are its own real stone base, not display props). Back to
+      // its original placement — foreground, its own lane clear of
+      // Chrysler/Flatiron's depth band, well past the bull/bear
+      // critters' walking lane (z between -42 and 0) since it sits well
+      // past z=0.
       try {
         const vesselMerged = mergeModelByMaterial(vesselModel.clone(true));
         const vessel = toonifyModel(vesselMerged);
         vessel.rotation.x = -Math.PI / 2;
         fitHeight(vessel, 14); // shorter than the skyscrapers, taller than Guggenheim/Flatiron
-        vessel.position.x = -10;
-        vessel.position.z = -36;
+        vessel.position.x = -24;
+        vessel.position.z = 46;
         nyc.add(vessel);
       } catch (e) {
         console.error("The Vessel failed to place — rest of the scene still loads", e);
