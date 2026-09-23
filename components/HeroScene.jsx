@@ -566,19 +566,19 @@ export default function HeroScene() {
       // materials (stone/terracotta/copper/gold/glass), pre-merged to one
       // mesh per material already, so it needs neither the vertex-color
       // pipeline nor the two hand-authored gap-filler boxes the previous
-      // export required. Its own real (measured) footprint collides with
-      // OWTC's oversized footprint at any depth alongside it, so it's
-      // pushed further back than OWTC instead — deep background, hazier
-      // with distance/fog, verified on-screen (camera frustum widens with
-      // depth, same reason OWTC's own wide footprint stays in frame this
-      // far off-center).
+      // export required. Shifted right (x=-68->-46) along with
+      // JPMorgan and 40 Wall St, to close the gap this trio had with
+      // ESB. That shift needed a deeper z too (-50->-63) — at the old
+      // z, moving any of the three right would have run straight into
+      // ESB's own wide footprint; the extra depth clears it instead,
+      // via z-separation rather than x.
       try {
         const woolworthMerged = mergeModelByMaterial(woolworthModel.clone(true));
         const woolworth = toonifyModel(woolworthMerged);
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
-        woolworth.position.x = -68;
-        woolworth.position.z = -50;
+        woolworth.position.x = -46;
+        woolworth.position.z = -63;
         nyc.add(woolworth);
       } catch (e) {
         console.error("Woolworth Building failed to place — rest of the scene still loads", e);
@@ -637,14 +637,11 @@ export default function HeroScene() {
         const jpmorgan = toonifyModel(jpmorganMerged);
         jpmorgan.rotation.x = -Math.PI / 2;
         fitHeight(jpmorgan, 44); // one of the tallest real towers here — background-tier company for OWTC
-        // To OWTC's left (x < -58.2, OWTC's own left edge) and pushed to a
-        // deeper z than OWTC's own range — OWTC's footprint already spans
-        // nearly the full visible width at its own depth, so there's no
-        // room beside it there; a bit farther back keeps this on-screen
-        // (verified by sampling the camera's full drift cycle) while
-        // still reading as left-of-OWTC in the rendered frame.
-        jpmorgan.position.x = -56;
-        jpmorgan.position.z = -50;
+        // Shifted right along with Woolworth and 40 Wall St (x=-56->-34,
+        // z=-50->-63) — see the note on Woolworth for why the deeper z
+        // came with it.
+        jpmorgan.position.x = -34;
+        jpmorgan.position.z = -63;
         nyc.add(jpmorgan);
       } catch (e) {
         console.error("JPMorgan 270 Park failed to place — rest of the scene still loads", e);
@@ -654,19 +651,18 @@ export default function HeroScene() {
       // briefly the world's tallest building that same year; its stepped
       // pyramidal roof and cathedral-lantern spire are the recognizable
       // silhouette. Clean building-only asset (real materials, no bundled
-      // scenery), so it needs no exclude list. Pulled back to the same
-      // z=-50 depth tier as ESB/Woolworth/JPMorgan — sits in the one gap
-      // that tier still had open, between JPMorgan's right edge (x=-50.3)
-      // and ESB's own very wide footprint (left edge x=-33.7); ESB's box
-      // alone spans nearly the whole center of that tier, so this was
-      // the only x left there that didn't collide with one of the three.
+      // scenery), so it needs no exclude list. Shifted right along with
+      // Woolworth and JPMorgan (x=-42->-20, z=-50->-63) — see the note on
+      // Woolworth for why the deeper z came with it. This one sat
+      // closest to ESB already (a 2.8-unit gap), so it's the one that
+      // needed the z change most.
       try {
         const wallStreet40Merged = mergeModelByMaterial(wallStreet40Model.clone(true));
         const wallStreet40 = toonifyModel(wallStreet40Merged);
         wallStreet40.rotation.x = -Math.PI / 2;
         fitHeight(wallStreet40, 36); // shorter than Chrysler/Woolworth, matching its real relative height
-        wallStreet40.position.x = -42;
-        wallStreet40.position.z = -50;
+        wallStreet40.position.x = -20;
+        wallStreet40.position.z = -63;
         nyc.add(wallStreet40);
       } catch (e) {
         console.error("40 Wall Street failed to place — rest of the scene still loads", e);
