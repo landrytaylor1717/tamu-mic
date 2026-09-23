@@ -546,14 +546,16 @@ export default function HeroScene() {
         const chrysler = chryslerMerged;
         chrysler.rotation.x = -Math.PI / 2;
         fitHeight(chrysler, 38); // shorter than ESB/OWTC, matching its real relative height
-        // Its crown and spire are distinctive enough to read well without
-        // sitting in the very front row — pulled back from z=32 to z=26
-        // (still ahead of the bridge/40 Wall St/Guggenheim tier, just not
-        // competing with Vessel for the closest position to camera).
-        // Keeps it well outside the bull/bear critters' patrol path (z
-        // between -42 and 0, near x=0) entirely.
+        // Pulled much deeper this time — past the bridge/40 Wall
+        // St/Guggenheim tier entirely and into OWTC's own depth band.
+        // Stays collision-free there only because OWTC's footprint,
+        // wide as it is, still doesn't reach as far right as x=-14 (its
+        // own right edge is x=-18.3) — depth alone doesn't clear it,
+        // this x lane does. Also clear of ESB's much wider footprint
+        // one tier further back, and of the critters' patrol lane
+        // (z between -42 and 0, near x=0).
         chrysler.position.x = -14;
-        chrysler.position.z = 26;
+        chrysler.position.z = -25;
         nyc.add(chrysler);
       } catch (e) {
         console.error("Chrysler Building failed to place — rest of the scene still loads", e);
@@ -690,21 +692,23 @@ export default function HeroScene() {
       // The Vessel — real Hudson Yards landmark (2019), the honeycomb
       // spiral staircase structure. Clean building-only asset (real
       // copper/glass/stone materials, no bundled scenery — the "plinth"
-      // parts are its own real stone base, not display props). Was the
-      // single closest thing to camera in the whole scene (z=46, front
-      // edge at 52.5) — pulled back to z=40, and shifted from x=-24 to
-      // x=-18 at the same time (its old x range overlapped Flatiron's by
-      // several units, which the old, much deeper z kept clear of; the
-      // new shallower z needed the x shift too, to stay clear of both
-      // Flatiron and the newly-pulled-back Chrysler). Still clear of the
-      // bull/bear critters' walking lane (z between -42 and 0).
+      // parts are its own real stone base, not display props). Pulled
+      // much deeper this round (from z=40 to z=-36) and shifted from
+      // x=-18 to x=-10 — that x clears OWTC's own right edge (x=-18.3),
+      // the same trick Chrysler uses one tier ahead of it. The specific
+      // depth (z=-36, not deeper) is the gap between Chrysler's new
+      // footprint (front edge z=-21.4, since they now share x-space) and
+      // ESB's much wider one further back (rear-facing edge z=-44.2) —
+      // there wasn't room to also push this one as far back as ESB
+      // without colliding with it. Still clear of the bull/bear
+      // critters' patrol lane (z between -42 and 0, near x=0).
       try {
         const vesselMerged = mergeModelByMaterial(vesselModel.clone(true));
         const vessel = toonifyModel(vesselMerged);
         vessel.rotation.x = -Math.PI / 2;
         fitHeight(vessel, 14); // shorter than the skyscrapers, taller than Guggenheim/Flatiron
-        vessel.position.x = -18;
-        vessel.position.z = 40;
+        vessel.position.x = -10;
+        vessel.position.z = -36;
         nyc.add(vessel);
       } catch (e) {
         console.error("The Vessel failed to place — rest of the scene still loads", e);
