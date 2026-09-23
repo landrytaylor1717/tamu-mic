@@ -546,15 +546,14 @@ export default function HeroScene() {
         const chrysler = chryslerMerged;
         chrysler.rotation.x = -Math.PI / 2;
         fitHeight(chrysler, 38); // shorter than ESB/OWTC, matching its real relative height
-        // Foreground accent, closest of the three to camera — its crown
-        // and spire are distinctive enough to read well up close, and
-        // putting it here (rather than tucked behind ESB/OWTC) gives it
-        // its own clear silhouette instead of competing with two much
-        // bigger footprints for the same airspace. Also keeps it well
-        // outside the bull/bear critters' patrol path (z between -42
-        // and 0, near x=0) entirely.
+        // Its crown and spire are distinctive enough to read well without
+        // sitting in the very front row — pulled back from z=32 to z=26
+        // (still ahead of the bridge/40 Wall St/Guggenheim tier, just not
+        // competing with Vessel for the closest position to camera).
+        // Keeps it well outside the bull/bear critters' patrol path (z
+        // between -42 and 0, near x=0) entirely.
         chrysler.position.x = -14;
-        chrysler.position.z = 32;
+        chrysler.position.z = 26;
         nyc.add(chrysler);
       } catch (e) {
         console.error("Chrysler Building failed to place — rest of the scene still loads", e);
@@ -691,20 +690,21 @@ export default function HeroScene() {
       // The Vessel — real Hudson Yards landmark (2019), the honeycomb
       // spiral staircase structure. Clean building-only asset (real
       // copper/glass/stone materials, no bundled scenery — the "plinth"
-      // parts are its own real stone base, not display props). Placed in
-      // the open foreground beyond Chrysler/Flatiron's own depth band,
-      // clear of the bull/bear critters' walking lane (z between -42 and
-      // 0) since it sits well past z=0. Offset in x from Chrysler's own
-      // x=-14 — sharing that x lined the two up along the same camera
-      // sightline (Vessel is the closer of the two), which read as one
-      // merged silhouette instead of two distinct buildings.
+      // parts are its own real stone base, not display props). Was the
+      // single closest thing to camera in the whole scene (z=46, front
+      // edge at 52.5) — pulled back to z=40, and shifted from x=-24 to
+      // x=-18 at the same time (its old x range overlapped Flatiron's by
+      // several units, which the old, much deeper z kept clear of; the
+      // new shallower z needed the x shift too, to stay clear of both
+      // Flatiron and the newly-pulled-back Chrysler). Still clear of the
+      // bull/bear critters' walking lane (z between -42 and 0).
       try {
         const vesselMerged = mergeModelByMaterial(vesselModel.clone(true));
         const vessel = toonifyModel(vesselMerged);
         vessel.rotation.x = -Math.PI / 2;
         fitHeight(vessel, 14); // shorter than the skyscrapers, taller than Guggenheim/Flatiron
-        vessel.position.x = -24;
-        vessel.position.z = 46;
+        vessel.position.x = -18;
+        vessel.position.z = 40;
         nyc.add(vessel);
       } catch (e) {
         console.error("The Vessel failed to place — rest of the scene still loads", e);
