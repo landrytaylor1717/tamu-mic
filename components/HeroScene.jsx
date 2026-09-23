@@ -461,24 +461,17 @@ export default function HeroScene() {
         const esb = toonifyModel(esbMerged);
         esb.rotation.x = -Math.PI / 2; // same source-file up-axis quirk as Kyle Field/Academic Building
         fitHeight(esb, 42);
-        // Background tier, behind OWTC (z=-18) — same depth as
-        // Woolworth/JPMorgan (z=-50), not deeper: z=-72 put it so deep
-        // into the fog falloff that it faded to a pale, barely-legible
-        // smudge. z=-50 keeps it a clearly readable background tower.
-        // x=-14, not further west: at z=-50, ESB's own z-range already
-        // clears OWTC's (max z=2.6) regardless of x — no bounding-box
-        // collision either way — so the earlier x=-96 was solving a
-        // problem (visual occlusion by OWTC) that z-separation alone
-        // already handles, at the cost of a much bigger one: measured
-        // against the actual rendered canvas width (not an artificially
-        // widened test viewport), x=-96 projects entirely off-screen —
-        // negative screen-x across its whole bounding box, fully outside
-        // the visible frame at realistic widths. x=-14 keeps it on-screen
-        // and still clear of Woolworth/JPMorgan/the bridge/the critters'
-        // walking lane (verified against each one's own measured
-        // footprint).
+        // Background tier, behind OWTC (z=-18). x=-14 keeps it on-screen
+        // (measured against the real canvas width, not an artificially
+        // widened test viewport) and still clear of the bridge/the
+        // critters' walking lane. Depth pushed to z=-68, the deepest of
+        // the four background buildings — its own footprint overlaps
+        // both JPMorgan's and 40 Wall St's in x (ESB's box is unusually
+        // wide), so it needs real z-separation from both, not just a
+        // token amount, to make the group read as staggered rather than
+        // one flat back wall.
         esb.position.x = -14;
-        esb.position.z = -50;
+        esb.position.z = -68;
         nyc.add(esb);
       } catch (e) {
         console.error("ESB failed to place — rest of the scene still loads", e);
@@ -566,19 +559,18 @@ export default function HeroScene() {
       // materials (stone/terracotta/copper/gold/glass), pre-merged to one
       // mesh per material already, so it needs neither the vertex-color
       // pipeline nor the two hand-authored gap-filler boxes the previous
-      // export required. Shifted right (x=-68->-46) along with
-      // JPMorgan and 40 Wall St, to close the gap this trio had with
-      // ESB. That shift needed a deeper z too (-50->-63) — at the old
-      // z, moving any of the three right would have run straight into
-      // ESB's own wide footprint; the extra depth clears it instead,
-      // via z-separation rather than x.
+      // export required. x=-46 clears every neighbor regardless of
+      // depth (its x-range doesn't overlap ESB, JPMorgan, or 40 Wall
+      // St's), so its z is free to pick purely for the staggered look —
+      // z=-60 sits it between the other three rather than flush with
+      // any of them.
       try {
         const woolworthMerged = mergeModelByMaterial(woolworthModel.clone(true));
         const woolworth = toonifyModel(woolworthMerged);
         woolworth.rotation.x = -Math.PI / 2;
         fitHeight(woolworth, 40); // real Woolworth is shorter than OWTC/ESB
         woolworth.position.x = -46;
-        woolworth.position.z = -63;
+        woolworth.position.z = -60;
         nyc.add(woolworth);
       } catch (e) {
         console.error("Woolworth Building failed to place — rest of the scene still loads", e);
@@ -637,11 +629,11 @@ export default function HeroScene() {
         const jpmorgan = toonifyModel(jpmorganMerged);
         jpmorgan.rotation.x = -Math.PI / 2;
         fitHeight(jpmorgan, 44); // one of the tallest real towers here — background-tier company for OWTC
-        // Shifted right along with Woolworth and 40 Wall St (x=-56->-34,
-        // z=-50->-63) — see the note on Woolworth for why the deeper z
-        // came with it.
+        // x=-34's own range overlaps ESB's wide footprint in x, so it
+        // needs real z-separation from ESB (now at z=-68) — z=-50 puts
+        // it at the shallow end of the group, 18 units clear.
         jpmorgan.position.x = -34;
-        jpmorgan.position.z = -63;
+        jpmorgan.position.z = -50;
         nyc.add(jpmorgan);
       } catch (e) {
         console.error("JPMorgan 270 Park failed to place — rest of the scene still loads", e);
@@ -651,18 +643,19 @@ export default function HeroScene() {
       // briefly the world's tallest building that same year; its stepped
       // pyramidal roof and cathedral-lantern spire are the recognizable
       // silhouette. Clean building-only asset (real materials, no bundled
-      // scenery), so it needs no exclude list. Shifted right along with
-      // Woolworth and JPMorgan (x=-42->-20, z=-50->-63) — see the note on
-      // Woolworth for why the deeper z came with it. This one sat
-      // closest to ESB already (a 2.8-unit gap), so it's the one that
-      // needed the z change most.
+      // scenery), so it needs no exclude list. x=-20's own range also
+      // overlaps ESB's wide footprint (ESB's box alone spans nearly the
+      // whole center of this depth tier), so it needs z-separation from
+      // ESB (z=-68) too — z=-52 puts it 16 units clear, at a different
+      // depth than JPMorgan and Woolworth so the four read as staggered
+      // rather than lined up on one flat back wall.
       try {
         const wallStreet40Merged = mergeModelByMaterial(wallStreet40Model.clone(true));
         const wallStreet40 = toonifyModel(wallStreet40Merged);
         wallStreet40.rotation.x = -Math.PI / 2;
         fitHeight(wallStreet40, 36); // shorter than Chrysler/Woolworth, matching its real relative height
         wallStreet40.position.x = -20;
-        wallStreet40.position.z = -63;
+        wallStreet40.position.z = -52;
         nyc.add(wallStreet40);
       } catch (e) {
         console.error("40 Wall Street failed to place — rest of the scene still loads", e);
