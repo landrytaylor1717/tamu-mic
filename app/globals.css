@@ -78,14 +78,32 @@ h2 {
 
 /* ---------- Ticker ---------- */
 .ticker-band {
+  position: relative;
   background: var(--ink);
   color: var(--paper);
   overflow: hidden;
   white-space: nowrap;
 }
+/* Sits inside the ticker band but sized/centered exactly like .wrap, so
+   the fade lines up with the logo chip floating above it (which shares
+   that same left edge via nav's own .wrap). Pointer-events off since
+   this is a purely visual gradient, not interactive. */
+.ticker-fade-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ticker-fade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+  background: linear-gradient(to right, var(--ink) 0%, var(--ink) 55%, transparent 100%);
+}
 .ticker-track {
   display: inline-flex;
-  padding: 15px 0;
+  padding: 10px 0;
   animation: scroll-left 160s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -134,19 +152,36 @@ h2 {
    then Apply pinned to the end — instead of stacking brand+Apply above
    a second links row. */
 nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 28px;
-  padding: 16px 0;
+  padding: 10px 0;
   border-bottom: 1px solid var(--rule);
 }
+/* Floats up out of nav's own row to overlap the ticker band above it
+   (a sibling element, not an ancestor, but absolute positioning still
+   renders on top of it) — the logo now bridges the seam between the
+   two bands instead of sitting inside its own dedicated row, which is
+   what actually frees up the vertical space. Its own paper-colored
+   chip keeps the dark-on-light wordmark legible over the dark ticker
+   above as well as the light nav below; .ticker-fade (in Ticker.jsx)
+   fades the scrolling ticker text into the band's own dark color
+   right where this chip sits, so nothing gets clipped mid-character. */
 .brand {
+  position: absolute;
+  left: 0;
+  top: -28px;
+  z-index: 20;
   display: flex;
   align-items: center;
   gap: 10px;
   text-decoration: none;
   color: var(--ink);
-  flex-shrink: 0;
+  background: var(--paper);
+  padding: 6px 16px 6px 6px;
+  border-radius: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 .mark {
   height: 24px;
@@ -177,6 +212,7 @@ nav .btn {
   gap: 20px;
   flex: 1;
   min-width: 0;
+  margin-left: 230px; /* room for the .brand chip floating above, now out of nav's own flex flow */
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -1440,6 +1476,7 @@ footer {
   .nav-links {
     gap: 16px;
     font-size: 13px;
+    margin-left: 60px; /* .brand chip is icon-only here (brand-name hidden), much narrower */
   }
   .page-head {
     padding: 24px 0 20px;

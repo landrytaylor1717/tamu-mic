@@ -55,6 +55,12 @@ export default async function Ticker() {
           <TickerItem key={i} {...item} />
         ))}
       </div>
+      {/* Fades scrolling ticker text into the band's own dark color right
+          where the logo chip (floating above, see .brand in globals.css)
+          sits, instead of letting it clip abruptly under the chip's edge. */}
+      <div className="ticker-fade-wrap" aria-hidden="true">
+        <div className="ticker-fade" />
+      </div>
     </div>
   );
 }
