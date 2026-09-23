@@ -605,13 +605,22 @@ export default function HeroScene() {
         flatiron.rotation.x = -Math.PI / 2;
         // Real Flatiron is much shorter than the others (22 stories) — its
         // fame is the wedge silhouette, not height, so foreground works in
-        // its favor: kept modest in scale, its real footprint is still a
-        // long thin wedge, tucked into Chrysler's depth band but well to
-        // the side of it (Chrysler's own footprint is narrow enough to
-        // leave that lane open).
+        // its favor: kept modest in scale.
         fitHeight(flatiron, 12);
+        // Pulled back to Guggenheim's general depth, interleaved with it
+        // and the Vessel rather than flush with either: its x-range
+        // overlaps the Vessel's by several units, so it needs real
+        // z-separation from it specifically. Both boxes are asymmetric
+        // (Flatiron's own footprint extends 9.1 back from its center vs
+        // only 3.7 forward — not the symmetric half-depth a quick
+        // average suggests, which is exactly what undershot this by 1.6
+        // units on the first pass) — z=28 clears the Vessel's front
+        // edge with real margin, confirmed against the actual rendered
+        // bounding boxes, not estimated ones. Its x-range only just
+        // clears Guggenheim's (under 2 units), so no z constraint from
+        // that one, but z=28 keeps daylight there too.
         flatiron.position.x = -33;
-        flatiron.position.z = 32;
+        flatiron.position.z = 28;
         nyc.add(flatiron);
       } catch (e) {
         console.error("Flatiron Building failed to place — rest of the scene still loads", e);
@@ -685,18 +694,19 @@ export default function HeroScene() {
       // The Vessel — real Hudson Yards landmark (2019), the honeycomb
       // spiral staircase structure. Clean building-only asset (real
       // copper/glass/stone materials, no bundled scenery — the "plinth"
-      // parts are its own real stone base, not display props). Back to
-      // its original placement — foreground, its own lane clear of
-      // Chrysler/Flatiron's depth band, well past the bull/bear
-      // critters' walking lane (z between -42 and 0) since it sits well
-      // past z=0.
+      // parts are its own real stone base, not display props). Pulled
+      // back to Guggenheim's depth band too, interleaved with it and
+      // Flatiron. z=10, not shallower: the Vessel's own x-range sits
+      // entirely inside OWTC's (unlike Flatiron/Guggenheim, which only
+      // brush its edge), so it needs real z-clearance from OWTC's own
+      // z-range (max z=2.6) on top of the Flatiron separation.
       try {
         const vesselMerged = mergeModelByMaterial(vesselModel.clone(true));
         const vessel = toonifyModel(vesselMerged);
         vessel.rotation.x = -Math.PI / 2;
         fitHeight(vessel, 14); // shorter than the skyscrapers, taller than Guggenheim/Flatiron
         vessel.position.x = -24;
-        vessel.position.z = 46;
+        vessel.position.z = 10;
         nyc.add(vessel);
       } catch (e) {
         console.error("The Vessel failed to place — rest of the scene still loads", e);
