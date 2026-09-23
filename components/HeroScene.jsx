@@ -679,8 +679,16 @@ export default function HeroScene() {
       // each landmark's actual rendered bounding box — z=6 originally
       // overlapped OWTC's own oversized footprint by a few units; z=12
       // clears it).
+      // "annex" (the real 1992 Gwathmey Siegel annex tower and its
+      // window-slit recesses, "annex front wall"/"annex slit 1-1"
+      // through "8-3"/"annex top cap"/"annex tower") is a real part of
+      // the building but renders as thin, flat, unlit dark slabs and a
+      // grid of small dark rectangles under this toon-shading pipeline —
+      // the exact "floating squares" reported earlier, just from a
+      // different model this time. Excluded so only the rotunda (the
+      // recognizable part) renders.
       try {
-        const guggenheimMerged = mergeModelByMaterial(guggenheimModel.clone(true));
+        const guggenheimMerged = mergeModelByMaterial(guggenheimModel.clone(true), ["annex"]);
         const guggenheim = toonifyModel(guggenheimMerged);
         guggenheim.rotation.x = -Math.PI / 2;
         fitHeight(guggenheim, 10);
