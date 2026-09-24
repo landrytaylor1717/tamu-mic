@@ -178,7 +178,6 @@ nav {
 }
 .brand-name em {
   font-style: italic;
-  color: var(--brass);
   font-weight: 500;
 }
 nav .btn {
