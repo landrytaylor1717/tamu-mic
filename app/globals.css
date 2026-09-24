@@ -80,6 +80,35 @@ h2 {
 .ticker-band {
   background: var(--ink);
   color: var(--paper);
+}
+/* Brand lives in the ticker row itself now, not a separate nav row — a
+   fixed-width flex item followed by the scrolling ticker, instead of a
+   floating chip layered on top of it (see globals.css history for why
+   that broke). */
+.ticker-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.ticker-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  padding: 13px 22px 13px 0;
+  border-right: 1px solid rgba(247, 245, 240, 0.16);
+  text-decoration: none;
+  color: var(--paper);
+}
+/* The mark is a solid black silhouette (shared with the footer's
+   light-background lockup via the same .mark class) — inverted to white
+   only in this dark ticker context. */
+.ticker-brand .mark {
+  filter: invert(1);
+}
+.ticker-viewport {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -124,29 +153,15 @@ h2 {
 }
 
 /* ---------- Nav ---------- */
-/* Two fixed rows instead of one wrapping flex row: ten links plus a
-   logo lockup and an Apply button don't fit on one line at most
-   widths, and letting them wrap freely used to push the header to
-   three or four rows depending on viewport. A dedicated (and on
-   narrow screens, horizontally scrollable) links row keeps the
-   header's height predictable everywhere. */
-/* One row: brand, then links (scrolling on its own if there's no room),
-   then Apply pinned to the end — instead of stacking brand+Apply above
-   a second links row. */
+/* Just links + Apply now that the brand lives up in the ticker row
+   (see .ticker-brand) — a single row, links scrolling on their own if
+   there's no room, Apply pinned to the end. */
 nav {
   display: flex;
   align-items: center;
   gap: 28px;
   padding: 16px 0;
   border-bottom: 1px solid var(--rule);
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--ink);
-  flex-shrink: 0;
 }
 .mark {
   height: 24px;
@@ -163,7 +178,7 @@ nav {
 }
 .brand-name em {
   font-style: italic;
-  color: var(--maroon);
+  color: var(--brass);
   font-weight: 500;
 }
 nav .btn {
@@ -1399,6 +1414,12 @@ footer {
   nav {
     padding: 12px 0;
     gap: 14px;
+  }
+  .ticker-row {
+    gap: 14px;
+  }
+  .ticker-brand {
+    padding: 11px 14px 11px 0;
   }
   .brand-name {
     display: none;

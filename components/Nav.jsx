@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
-import logoIcon from "@/public/logo-icon.png";
 import { APPLY_FORM_URL } from "@/lib/links";
 
 const links = [
@@ -19,18 +17,6 @@ const links = [
 export default function Nav({ active }) {
   return (
     <nav>
-      <Link className="brand" href="/">
-        <Image
-          className="mark"
-          src={logoIcon}
-          alt="Maroon Investment Club — bull and bear mark"
-          height={24}
-          style={{ width: "auto" }}
-        />
-        <span className="brand-name">
-          Maroon<em>&nbsp;Investment&nbsp;Club</em>
-        </span>
-      </Link>
       <div className="nav-links">
         {links.map((link) => (
           <Link

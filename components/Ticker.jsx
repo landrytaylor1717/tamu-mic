@@ -1,3 +1,6 @@
+import Link from "next/link";
+import Image from "next/image";
+import logoIcon from "@/public/logo-icon.png";
 import { tickerItems } from "./tickerConfig";
 import { getQuote } from "@/lib/marketData";
 
@@ -50,10 +53,26 @@ export default async function Ticker() {
   const doubled = [...items, ...items];
   return (
     <div className="ticker-band">
-      <div className="ticker-track" aria-hidden="true">
-        {doubled.map((item, i) => (
-          <TickerItem key={i} {...item} />
-        ))}
+      <div className="wrap ticker-row">
+        <Link className="ticker-brand" href="/">
+          <Image
+            className="mark"
+            src={logoIcon}
+            alt="Maroon Investment Club — bull and bear mark"
+            height={22}
+            style={{ width: "auto" }}
+          />
+          <span className="brand-name">
+            Maroon<em>&nbsp;Investment&nbsp;Club</em>
+          </span>
+        </Link>
+        <div className="ticker-viewport">
+          <div className="ticker-track" aria-hidden="true">
+            {doubled.map((item, i) => (
+              <TickerItem key={i} {...item} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
